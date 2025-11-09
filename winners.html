@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Winners</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>🏅 Top Websites</h1>
+  <ul id="winnersList"></ul>
+
+  <script type="module">
+    import { db, getDocs, collection } from "./firebase.js";
+
+    async function showWinners() {
+      const querySnapshot = await getDocs(collection(db, "websites"));
+      const websites = [];
+      querySnapshot.forEach(doc => websites.push({ id: doc.id, ...doc.data() }));
+      websites.sort((a, b) => b.votes - a.votes);
+      
+      const list = document.getElementById('winnersList');
+      websites.forEach((site, i) => {
+        const li = document.createElement('li');
+        li.textContent = `${i + 1}. ${site.title} - ${site.votes} votes`;
+        list.appendChild(li);
+      });
+    }
+
+    showWinners();
+  </script>
+</body>
+</html>
