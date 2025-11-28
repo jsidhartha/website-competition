@@ -1,14 +1,1067 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Website Competition</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>ConnX Holiday Competition 2025</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            'comic': ['"Comic Sans MS"', '"Chalkboard SE"', 'sans-serif'],
+          },
+          animation: {
+            'float-slow': 'float 6s ease-in-out infinite',
+            'float-medium': 'float 4s ease-in-out infinite',
+            'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'drive': 'drive 15s linear infinite',
+            'wiggle': 'wiggle 1s ease-in-out infinite',
+            'spin-slow': 'spin 8s linear infinite',
+            'shimmer': 'shimmer 2s linear infinite',
+          },
+          keyframes: {
+            float: {
+              '0%,100%': { transform: 'translateY(0) rotate(0deg)' },
+              '50%': { transform: 'translateY(-15px) rotate(5deg)' },
+            },
+            drive: {
+              '0%': { transform: 'translateX(-100vw)' },
+              '100%': { transform: 'translateX(100vw)' },
+            },
+            wiggle: {
+              '0%, 100%': { transform: 'rotate(-1deg)' },
+              '50%': { transform: 'rotate(1deg)' },
+            },
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Vue 3 -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* Animated gradient background */
+    .animated-bg {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.6), transparent 50%),
+        radial-gradient(circle at 80% 0%, rgba(255, 192, 203, 0.5), transparent 55%),
+        radial-gradient(circle at 0% 80%, rgba(173, 216, 230, 0.5), transparent 55%),
+        radial-gradient(circle at 90% 90%, rgba(144, 238, 144, 0.5), transparent 55%);
+      background-color: #fff7e6;
+      background-size: 200% 200%;
+      animation: gradientShift 20s ease-in-out infinite;
+      z-index: -20;
+    }
+
+    .dark .animated-bg {
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1), transparent 55%),
+        radial-gradient(circle at 80% 0%, rgba(147, 197, 253, 0.15), transparent 55%),
+        radial-gradient(circle at 0% 80%, rgba(167, 243, 208, 0.1), transparent 55%),
+        radial-gradient(circle at 90% 90%, rgba(251, 191, 36, 0.1), transparent 55%);
+      background-color: #0f172a;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 0%;
+      }
+
+      50% {
+        background-position: 100% 100%;
+      }
+
+      100% {
+        background-position: 0% 0%;
+      }
+    }
+
+    /* Snow / Confetti Canvas */
+    canvas#snowCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -10;
+    }
+
+    /* Animated page transitions */
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity .4s, transform .4s;
+    }
+
+    .fade-enter-from,
+    .fade-leave-to {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    /* Floating emojis */
+    .emoji-float {
+      position: fixed;
+      font-size: 2.5rem;
+      z-index: -5;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Chaos Mode Classes */
+    .chaos-mode {
+      font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif !important;
+      transform: rotate(0.5deg);
+    }
+
+    .chaos-mode button:hover {
+      transform: scale(0.9) rotate(-3deg) !important;
+    }
+
+    .chaos-mode h1,
+    .chaos-mode h2 {
+      letter-spacing: -2px;
+      color: #ec4899;
+    }
+
+    /* Bus Animation Container */
+    .bus-lane {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      z-index: -2;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bus {
+      position: absolute;
+      font-size: 3rem;
+      bottom: 10px;
+      left: -100px;
+      /* Start off screen */
+    }
+
+    /* Podium Styles */
+    .podium-container {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .podium-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      transition: transform 0.3s ease;
+    }
+
+    .podium-step:hover {
+      transform: scale(1.05);
+    }
+
+    .podium-block {
+      width: 100px;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 10px;
+      color: white;
+      font-weight: bold;
+      font-size: 2rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Podium Heights */
+    .podium-1 .podium-block {
+      height: 160px;
+      background: linear-gradient(to top, #eab308, #facc15);
+      border: 2px solid #fef08a;
+    }
+
+    /* Gold */
+    .podium-2 .podium-block {
+      height: 120px;
+      background: linear-gradient(to top, #9ca3af, #d1d5db);
+      border: 2px solid #e5e7eb;
+    }
+
+    /* Silver */
+    .podium-3 .podium-block {
+      height: 90px;
+      background: linear-gradient(to top, #d97706, #fbbf24);
+      border: 2px solid #fde68a;
+    }
+
+    /* Bronze */
+  </style>
 </head>
-<body>
-  <h1>🏆 Website Competition</h1>
-  <div id="websites" class="grid"></div>
-  <script type="module" src="script.js"></script>
+
+<body :class="{'chaos-mode': chaosMode}"
+  class="min-h-screen text-gray-800 dark:text-gray-100 transition-all duration-500 overflow-x-hidden">
+
+  <!-- Background layers -->
+  <div class="animated-bg"></div>
+  <canvas id="snowCanvas"></canvas>
+
+  <!-- Background Floating Items -->
+  <div class="emoji-float animate-float-slow left-4 top-20">🚍</div>
+  <div class="emoji-float animate-float-medium right-6 top-40">🎄</div>
+  <div class="emoji-float animate-float-slow left-10 bottom-32">🎟️</div>
+  <div class="emoji-float animate-float-medium right-10 bottom-24">☃️</div>
+  <div class="emoji-float animate-spin-slow left-1/2 top-1/2 opacity-10 text-9xl">❄️</div>
+
+  <!-- Moving Bus Animation -->
+  <div class="bus-lane">
+    <div class="bus animate-drive">🚌💨 <span class="text-sm bg-white text-black p-1 rounded -ml-2">ConnX Express</span>
+    </div>
+  </div>
+
+  <div id="app" class="relative z-10 min-h-screen flex flex-col">
+
+    <!-- NAVBAR -->
+    <nav
+      class="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 dark:from-indigo-900 dark:via-purple-900 dark:to-pink-900 p-3 shadow-2xl sticky top-0 z-50 backdrop-blur-md bg-opacity-90">
+      <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+        <h1 @click="goHome"
+          class="text-white text-xl md:text-2xl font-extrabold drop-shadow-lg cursor-pointer flex items-center gap-2 hover:scale-105 transition-transform">
+          <span class="text-3xl">🎉</span>
+          <span>ConnX Holiday '25</span>
+        </h1>
+
+        <!-- Countdown Timer -->
+        <div @dblclick="currentPage = 'admin'; location.hash='#/admin'"
+          class="hidden lg:flex items-center gap-2 text-white bg-white/20 px-4 py-1 rounded-full text-xs font-mono border border-white/30 shadow-inner cursor-help select-none"
+          title="Double click for secret admin access">
+          <span>🏆 Winners Revealed in:</span>
+          <span class="font-bold text-yellow-300 text-sm">{{ countdownString }}</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <!-- Main Nav -->
+          <ul class="hidden md:flex gap-4 text-white font-bold text-sm uppercase tracking-wide">
+            <li><a href="#/home" :class="{'text-yellow-300 underline': currentPage === 'home'}"
+                class="hover:text-yellow-200 transition-colors">Vote</a></li>
+            <!-- HIDE SUBMIT IF COMPETITION IS OVER -->
+            <li v-if="!competitionEnded"><a href="#/submit"
+                :class="{'text-yellow-300 underline': currentPage === 'submit'}"
+                class="hover:text-yellow-200 transition-colors">Submit</a></li>
+            <li><a href="#/winners" :class="{'text-yellow-300 underline': currentPage === 'winners'}"
+                class="hover:text-yellow-200 transition-colors">Leaderboard</a></li>
+          </ul>
+
+          <!-- Mobile Nav -->
+          <select
+            class="md:hidden bg-white/20 text-white rounded-lg px-2 py-1 text-sm border-none outline-none focus:ring-2 focus:ring-yellow-300 cursor-pointer"
+            @change="navigate($event)" :value="currentPage">
+            <option class="text-black" value="home">Vote</option>
+            <!-- HIDE SUBMIT IF COMPETITION IS OVER -->
+            <option v-if="!competitionEnded" class="text-black" value="submit">Submit</option>
+            <option class="text-black" value="winners">Leaderboard</option>
+          </select>
+
+          <!-- Chaos Toggle -->
+          <button @click="toggleChaos"
+            class="bg-red-500/80 hover:bg-red-600 text-white px-2 py-1 rounded-lg text-sm font-bold border-b-4 border-red-700 active:border-b-0 active:translate-y-1 transition-all"
+            title="Toggle Chaos Mode">
+            🤪
+          </button>
+
+          <!-- Snow toggle -->
+          <button @click="toggleSnow"
+            class="bg-blue-400/50 hover:bg-blue-500/50 text-white px-2 py-1 rounded-lg text-lg transition-colors"
+            :title="snowEnabled ? 'Stop the snow' : 'Let it snow'">
+            {{ snowEnabled ? '❄️' : '🚫' }}
+          </button>
+
+          <!-- Dark Mode Toggle -->
+          <button @click="toggleDark"
+            class="bg-slate-800/50 text-white px-2 py-1 rounded-lg text-lg transition-colors hover:bg-slate-700/50">
+            {{ isDark ? '🌙' : '☀️' }}
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 container mx-auto p-4 sm:p-6 pb-20">
+
+      <!-- Mobile Countdown (visible only on small screens) -->
+      <div class="lg:hidden mb-6 text-center">
+        <div class="inline-block bg-pink-600/90 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
+          ⏳ Winners in: {{ countdownString }}
+        </div>
+      </div>
+
+      <transition name="fade" mode="out-in">
+        <div :key="currentPage">
+
+          <!-- HOME / VOTING PAGE -->
+          <section v-if="currentPage === 'home'">
+            <div class="text-center mb-8 relative">
+              <h2
+                class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600 dark:from-pink-300 dark:to-blue-300 mb-2 drop-shadow-sm filter">
+                "Bad UI" Showdown
+              </h2>
+              <p class="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                Welcome to the ConnX Holiday Party! 🚍 <br>
+                Vote for the most <span class="font-bold text-red-500">hilariously frustrating</span> "Rate Your Ride"
+                widget.
+              </p>
+
+              <!-- Competition Ended Message -->
+              <div v-if="competitionEnded"
+                class="mt-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 max-w-2xl mx-auto rounded shadow-lg"
+                role="alert">
+                <p class="font-bold">🚫 Voting is Closed!</p>
+                <p>The competition has ended. Check the Leaderboard to see the winners!</p>
+              </div>
+
+              <div class="absolute -top-4 -right-4 md:right-20 animate-bounce hidden md:block text-4xl">👇</div>
+            </div>
+
+            <div v-if="websites.length === 0"
+              class="text-center p-12 bg-white/50 dark:bg-black/20 rounded-3xl backdrop-blur-sm">
+              <p class="text-2xl text-gray-500">No entries yet! Be the first to submit chaos. 😈</p>
+              <button v-if="!competitionEnded" @click="currentPage = 'submit'; location.hash='#/submit'"
+                class="mt-4 bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition">
+                Submit Now
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div v-for="(site, i) in websites" :key="site.id"
+                class="group relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-md p-1 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border-4 border-transparent hover:border-pink-300 dark:hover:border-purple-500">
+
+                <div
+                  class="p-5 rounded-[20px] bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 h-full flex flex-col">
+                  <div class="flex justify-between items-start mb-3">
+                    <div>
+                      <h3 class="text-2xl font-bold text-gray-800 dark:text-white leading-tight">
+                        {{ site.title }}
+                      </h3>
+                      <!-- Show External Link Icon only if it's a URL -->
+                      <a v-if="site.type === 'url'" :href="site.url" target="_blank"
+                        class="text-xs text-blue-500 hover:underline flex items-center gap-1">
+                        Open in new tab ↗
+                      </a>
+                      <span v-else class="text-xs text-purple-500 flex items-center gap-1">
+                        &lt;/&gt; Embedded Code
+                      </span>
+                    </div>
+                    <span class="text-3xl filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                      👾
+                    </span>
+                  </div>
+
+                  <!-- Iframe container -->
+                  <div
+                    class="relative w-full bg-gray-200 dark:bg-black rounded-xl overflow-hidden shadow-inner border border-gray-300 dark:border-gray-700 mb-4 group-hover:ring-4 ring-pink-500/20 transition-all flex justify-center">
+                    <div class="absolute inset-0 flex items-center justify-center text-gray-400 z-0">
+                      <span class="animate-pulse">Loading Bad UI...</span>
+                    </div>
+
+                    <!-- Dynamic Iframe: Handles both URL and Code -->
+                    <iframe v-if="site.type === 'url'" :src="site.url"
+                      class="relative z-10 w-full max-w-[500px] h-[350px] bg-white" scrolling="auto" loading="lazy"
+                      frameborder="0">
+                    </iframe>
+                    <iframe v-else :srcdoc="site.code" class="relative z-10 w-full max-w-[500px] h-[350px] bg-white"
+                      scrolling="auto" loading="lazy" frameborder="0">
+                    </iframe>
+                  </div>
+
+                  <div class="mt-auto flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-3 rounded-2xl">
+                    <button :disabled="competitionEnded || hasVoted(site.id)" @click="vote(site.id, $event)" :class="[
+                        competitionEnded || hasVoted(site.id) ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 hover:scale-105',
+                        hasVoted(site.id) ? '!bg-green-500 !from-green-500 !to-green-600' : ''
+                      ]"
+                      class="text-white px-6 py-2 rounded-xl shadow-lg transform active:scale-95 transition-all font-bold flex items-center gap-2 group/btn">
+                      <span>{{ hasVoted(site.id) ? '✅ Voted' : (competitionEnded ? 'Closed 🔒' : '👍 Vote') }}</span>
+                      <span v-if="!competitionEnded && !hasVoted(site.id)"
+                        class="group-hover/btn:animate-bounce">🔥</span>
+                    </button>
+
+                    <div class="flex flex-col items-end">
+                      <span class="text-xs uppercase tracking-wider text-gray-500">Current Score</span>
+                      <span
+                        class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 font-mono">
+                        {{ site.votes ?? 0 }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SUBMIT PAGE -->
+          <section v-else-if="currentPage === 'submit'" class="max-w-2xl mx-auto">
+
+            <!-- Check if competition is ended -->
+            <div v-if="competitionEnded"
+              class="bg-white/90 dark:bg-gray-900/90 p-10 rounded-3xl shadow-2xl text-center">
+              <h2 class="text-4xl font-black text-gray-400 mb-4">⛔ Submissions Closed</h2>
+              <p class="text-xl">The deadline has passed! Good luck to all participants.</p>
+              <button @click="goHome" class="mt-6 bg-blue-500 text-white px-6 py-2 rounded-xl">Back to Home</button>
+            </div>
+
+            <div v-else
+              class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border-t-4 border-blue-500 relative overflow-hidden">
+              <!-- Decorative background element -->
+              <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-400/20 rounded-full blur-3xl"></div>
+
+              <h2 class="text-3xl md:text-4xl font-black text-center mb-2 text-gray-800 dark:text-white relative z-10">
+                Submit Entry 🚀
+              </h2>
+              <p class="text-center text-gray-600 dark:text-gray-400 mb-8 relative z-10">
+                Ready to unleash your chaotic masterpiece?
+              </p>
+
+              <!-- Submission Mode Toggle -->
+              <div class="flex justify-center mb-6 relative z-10">
+                <div class="bg-gray-200 dark:bg-gray-800 p-1 rounded-xl flex gap-1">
+                  <button @click="submitMode = 'url'"
+                    :class="submitMode === 'url' ? 'bg-white dark:bg-gray-700 shadow-sm text-blue-600 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'"
+                    class="px-4 py-2 rounded-lg font-bold transition-all text-sm flex items-center gap-2">
+                    🔗 External Link
+                  </button>
+                  <button @click="submitMode = 'code'"
+                    :class="submitMode === 'code' ? 'bg-white dark:bg-gray-700 shadow-sm text-purple-600 dark:text-purple-400' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'"
+                    class="px-4 py-2 rounded-lg font-bold transition-all text-sm flex items-center gap-2">
+                    💻 Paste Code
+                  </button>
+                </div>
+              </div>
+
+              <form @submit.prevent="submitSite" class="flex flex-col gap-6 relative z-10">
+                <div class="group">
+                  <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Widget Title</label>
+                  <input v-model="form.title" placeholder="e.g. The Impossible Slider"
+                    class="w-full border-2 border-gray-200 dark:border-gray-700 p-4 rounded-xl dark:bg-gray-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 focus:outline-none transition-all font-lg"
+                    required />
+                  <p class="text-xs text-gray-500 mt-1 ml-1 group-hover:text-blue-500 transition-colors">No personal
+                    names in the title, please!</p>
+                </div>
+
+                <!-- URL Input -->
+                <div v-if="submitMode === 'url'">
+                  <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">GitHub Pages URL</label>
+                  <input v-model="form.url" placeholder="https://yourname.github.io/bad-ui-widget"
+                    class="w-full border-2 border-gray-200 dark:border-gray-700 p-4 rounded-xl dark:bg-gray-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 focus:outline-none transition-all font-mono text-sm"
+                    required />
+                </div>
+
+                <!-- Code Input -->
+                <div v-if="submitMode === 'code'">
+                  <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Paste Your Code
+                    (HTML/CSS/JS)</label>
+                  <textarea v-model="form.code" rows="8"
+                    placeholder="<!DOCTYPE html><html><body><button>Click Me</button></body></html>"
+                    class="w-full border-2 border-gray-200 dark:border-gray-700 p-4 rounded-xl dark:bg-gray-800 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 focus:outline-none transition-all font-mono text-xs"
+                    required></textarea>
+                  <p class="text-xs text-gray-500 mt-2">Code will be rendered directly in the iframe.</p>
+                </div>
+
+                <button
+                  class="relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white p-4 rounded-xl shadow-lg shadow-blue-500/30 font-bold text-lg transform hover:-translate-y-1 transition-all flex justify-center items-center gap-2 group">
+
+                  <!-- Shimmer Effect -->
+                  <div
+                    class="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-0">
+                  </div>
+
+                  <span class="relative z-10">Submit to the Chaos</span> <span class="relative z-10">📤</span>
+                </button>
+              </form>
+
+              <!-- Rules Box -->
+              <div
+                class="mt-8 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800">
+                <h3 class="font-bold text-blue-800 dark:text-blue-300 mb-2 flex items-center gap-2">
+                  <span>📌</span> Guidelines
+                </h3>
+                <ul class="text-sm space-y-2 text-blue-900 dark:text-blue-200">
+                  <li class="flex gap-2"><span>✅</span> Theme: "Rate Your Ride" (Transit Feedback)</li>
+                  <li class="flex gap-2"><span>✅</span> Dimensions: Optimized for 500x350px</li>
+                  <li class="flex gap-2"><span>✅</span> Vibe: Funny, annoying, but workplace safe</li>
+                </ul>
+              </div>
+
+              <!-- Preview -->
+              <div v-if="previewContent" class="mt-8">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="animate-pulse text-green-500">●</span>
+                  <h3 class="font-bold">Live Preview</h3>
+                </div>
+                <div class="flex justify-center bg-gray-800 p-4 rounded-2xl">
+                  <iframe v-if="submitMode === 'url'" :src="previewContent" width="500" height="350"
+                    class="bg-white rounded-lg shadow-lg" scrolling="auto">
+                  </iframe>
+                  <iframe v-else :srcdoc="previewContent" width="500" height="350" class="bg-white rounded-lg shadow-lg"
+                    scrolling="auto">
+                  </iframe>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- WINNERS / LEADERBOARD PAGE -->
+          <section v-else-if="currentPage === 'winners'" class="max-w-4xl mx-auto">
+            <div class="text-center mb-10">
+              <h2 class="text-4xl md:text-5xl font-black text-green-600 dark:text-green-400 mb-2">
+                Hall of Chaos 🏅
+              </h2>
+              <p class="text-gray-600 dark:text-gray-400">
+                The most frustrating user experiences, ranked.
+              </p>
+            </div>
+
+            <!-- PODIUM SECTION (Only shows if we have winners) -->
+            <div v-if="sortedWinners.length > 0" class="podium-container pt-8 hidden sm:flex">
+
+              <!-- 2nd Place (Silver) -->
+              <div v-if="sortedWinners[1]" class="podium-step podium-2 w-1/4">
+                <div class="mb-2 text-center">
+                  <div
+                    class="w-16 h-16 mx-auto bg-gray-200 rounded-full border-4 border-gray-300 flex items-center justify-center text-2xl shadow-lg mb-2">
+                    🥈</div>
+                  <h4 class="font-bold text-sm truncate w-full">{{ sortedWinners[1].title }}</h4>
+                  <p class="text-xs text-gray-500">{{ sortedWinners[1].votes }} votes</p>
+                </div>
+                <div class="podium-block w-full">2</div>
+              </div>
+
+              <!-- 1st Place (Gold) -->
+              <div v-if="sortedWinners[0]" class="podium-step podium-1 w-1/3 z-10">
+                <!-- Crown -->
+                <div class="text-5xl mb-2 animate-bounce">👑</div>
+                <div class="mb-2 text-center">
+                  <div
+                    class="w-20 h-20 mx-auto bg-yellow-100 rounded-full border-4 border-yellow-400 flex items-center justify-center text-4xl shadow-lg mb-2">
+                    🥇</div>
+                  <h4 class="font-bold text-lg truncate w-full">{{ sortedWinners[0].title }}</h4>
+                  <p class="text-sm text-yellow-600 font-bold">{{ sortedWinners[0].votes }} votes</p>
+                </div>
+                <div class="podium-block w-full">1</div>
+              </div>
+
+              <!-- 3rd Place (Bronze) -->
+              <div v-if="sortedWinners[2]" class="podium-step podium-3 w-1/4">
+                <div class="mb-2 text-center">
+                  <div
+                    class="w-16 h-16 mx-auto bg-orange-100 rounded-full border-4 border-orange-300 flex items-center justify-center text-2xl shadow-lg mb-2">
+                    🥉</div>
+                  <h4 class="font-bold text-sm truncate w-full">{{ sortedWinners[2].title }}</h4>
+                  <p class="text-xs text-gray-500">{{ sortedWinners[2].votes }} votes</p>
+                </div>
+                <div class="podium-block w-full">3</div>
+              </div>
+            </div>
+
+            <!-- LIST SECTION (For everyone else, or mobile view) -->
+            <div
+              class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+              <div class="p-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
+                <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-gray-500">
+                  <span>Rank & Entry</span>
+                  <span>Votes</span>
+                </div>
+              </div>
+
+              <ul>
+                <li v-for="(site, i) in sortedWinners" :key="site.id"
+                  class="group flex justify-between items-center p-4 sm:p-6 border-b border-gray-100 dark:border-gray-800 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors">
+
+                  <div class="flex items-center gap-4 sm:gap-6">
+                    <!-- Rank Badges -->
+                    <div class="w-12 flex justify-center flex-shrink-0">
+                      <div v-if="i < 3"
+                        class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full text-sm sm:text-xl font-bold shadow-md border-2 border-white text-white transform group-hover:scale-110 transition-transform"
+                        :class="{
+                          'bg-yellow-400': i === 0,
+                          'bg-gray-400': i === 1,
+                          'bg-orange-400': i === 2
+                        }">
+                        {{ i + 1 }}
+                      </div>
+                      <span v-else class="text-gray-400 font-mono text-xl font-bold pt-1">#{{ i + 1 }}</span>
+                    </div>
+
+                    <div class="overflow-hidden">
+                      <h4 class="font-bold text-md sm:text-xl truncate">{{ site.title }}</h4>
+                      <a v-if="site.type === 'url'" :href="site.url" target="_blank"
+                        class="text-xs text-gray-400 hover:text-blue-500 flex items-center gap-1">
+                        View Site
+                        <span class="opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
+                      </a>
+                      <span v-else class="text-xs text-gray-400 flex items-center gap-1">
+                        &lt;/&gt; Embedded
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="text-right flex-shrink-0 pl-2">
+                    <span class="block text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400 font-mono">
+                      {{ site.votes ?? 0 }}
+                    </span>
+                  </div>
+                </li>
+              </ul>
+
+              <div v-if="websites.length === 0" class="p-8 text-center text-gray-500">
+                No votes yet. The board is empty! 🕸️
+              </div>
+            </div>
+          </section>
+
+          <!-- ADMIN PAGE -->
+          <section v-else-if="currentPage === 'admin'" class="max-w-4xl mx-auto">
+            <div v-if="!adminAuth"
+              class="max-w-md mx-auto bg-white/90 dark:bg-gray-900/90 p-8 rounded-3xl shadow-xl text-center">
+              <div class="text-5xl mb-4">🔐</div>
+              <h2 class="text-2xl font-bold mb-4">Admin Access</h2>
+              <form @submit.prevent="loginAdmin" class="flex gap-2">
+                <input v-model="adminPass" type="password" placeholder="Password..."
+                  class="flex-1 border p-3 rounded-xl dark:bg-gray-800" />
+                <button class="bg-purple-600 text-white px-6 rounded-xl font-bold hover:bg-purple-700">
+                  Go
+                </button>
+              </form>
+            </div>
+
+            <div v-else>
+              <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-purple-600 dark:text-purple-300 flex items-center gap-2">
+                  🛠 Dashboard
+                </h2>
+                <button @click="adminAuth = false" class="text-sm text-red-500 hover:underline">Logout</button>
+              </div>
+
+              <div class="grid gap-4">
+                <div v-for="site in websites" :key="site.id"
+                  class="bg-white/90 dark:bg-gray-900/90 p-4 rounded-2xl shadow border-l-4 border-purple-500 flex flex-col md:flex-row justify-between items-center gap-4">
+                  <div class="flex-1 overflow-hidden">
+                    <h3 class="font-bold text-lg">{{ site.title }}</h3>
+                    <p class="text-xs text-gray-500 truncate">
+                      {{ site.type === 'url' ? site.url : 'Embedded Code' }}
+                    </p>
+                  </div>
+                  <div class="flex items-center gap-6">
+                    <div class="text-center">
+                      <span class="block text-xs text-gray-500">Votes</span>
+                      <span class="font-bold text-xl">{{ site.votes ?? 0 }}</span>
+                    </div>
+                    <button @click="deleteEntry(site.id)"
+                      class="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-lg transition-colors" title="Delete">
+                      🗑️
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </transition>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center p-6 text-sm text-gray-500 bg-white/30 dark:bg-black/30 backdrop-blur-sm">
+      <p>ConnX Holiday Competition 2025 • "Rate Your Ride"</p>
+    </footer>
+
+  </div>
+
+  <!-- FIREBASE + APP SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      doc,
+      increment,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDlR4QxTG6EGwkHXJgQE-_WS-33cs9ytZY",
+      authDomain: "website-competition-fd59e.firebaseapp.com",
+      projectId: "website-competition-fd59e",
+      storageBucket: "website-competition-fd59e.firebasestorage.app",
+      messagingSenderId: "558845407480",
+      appId: "1:558845407480:web:cef69f716712998e524b0d",
+      measurementId: "G-3344P4ZNVE"
+    };
+
+    const appFB = initializeApp(firebaseConfig);
+    const db = getFirestore(appFB);
+    const colRef = collection(db, "websites");
+
+    // --- Snow / Confetti Logic ---
+    const snowCanvas = document.getElementById("snowCanvas");
+    const ctx = snowCanvas.getContext("2d");
+
+    function resizeCanvas() {
+      snowCanvas.width = window.innerWidth;
+      snowCanvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    let snowEnabled = true;
+    const particles = [];
+
+    function initParticles() {
+      particles.length = 0;
+      const count = window.innerWidth < 600 ? 40 : 100;
+      for (let i = 0; i < count; i++) {
+        const typeRand = Math.random();
+        let type = "snow";
+        if (typeRand > 0.8) type = "confetti";
+
+        particles.push({
+          x: Math.random() * snowCanvas.width,
+          y: Math.random() * snowCanvas.height,
+          r: Math.random() * 3 + 1,
+          d: Math.random() * 1 + 0.5,
+          type,
+          color: `hsl(${Math.random() * 360}, 80%, 60%)`,
+          tilt: Math.random() * 10,
+          tiltAngle: 0,
+          tiltAngleIncremental: (Math.random() * 0.07) + 0.05
+        });
+      }
+    }
+    initParticles();
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
+      if (!snowEnabled) return;
+
+      particles.forEach(p => {
+        ctx.beginPath();
+        if (p.type === "snow") {
+          ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          ctx.fillStyle = p.color;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.tilt);
+          ctx.fillRect(-p.r, -p.r, p.r * 2, p.r * 2);
+          ctx.restore();
+        }
+      });
+    }
+
+    function updateParticles() {
+      if (!snowEnabled) return;
+      particles.forEach(p => {
+        p.tiltAngle += p.tiltAngleIncremental;
+        p.y += (Math.cos(p.d) + 1 + p.r / 2) * 0.5;
+        p.tilt = Math.sin(p.tiltAngle) * 15;
+
+        if (p.y > snowCanvas.height) {
+          p.y = -10;
+          p.x = Math.random() * snowCanvas.width;
+        }
+      });
+    }
+
+    function animateBackground() {
+      drawParticles();
+      updateParticles();
+      requestAnimationFrame(animateBackground);
+    }
+    animateBackground();
+
+    // --- Vue App ---
+    const { createApp } = Vue;
+
+    const voteSound = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
+    const submitSound = new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg");
+    const tadaSound = new Audio("https://actions.google.com/sounds/v1/cartoon/tada_fanfare_a.ogg");
+
+    createApp({
+      data() {
+        return {
+          currentPage: "home",
+          websites: [],
+          submitMode: "url", // 'url' or 'code'
+          form: { title: "", url: "", code: "" },
+          adminAuth: false,
+          adminPass: "",
+          snowEnabled: true,
+          isDark: false,
+          chaosMode: false,
+          countdownString: "Calculating...",
+          competitionEnded: false,
+          timerInterval: null,
+          votedItems: [], // Track votes in local state
+          processingVotes: new Set() // Prevent multiple clicks on same item
+        };
+      },
+
+      computed: {
+        sortedWinners() {
+          return [...this.websites].sort((a, b) => (b.votes ?? 0) - (a.votes ?? 0));
+        },
+        previewContent() {
+          if (this.submitMode === 'url') {
+            return (this.form.url && this.form.url.startsWith("https://")) ? this.form.url : "";
+          } else {
+            return this.form.code;
+          }
+        }
+      },
+
+      methods: {
+        handleRoute() {
+          const route = location.hash.replace("#/", "") || "home";
+          this.currentPage = route;
+        },
+
+        navigate(event) {
+          const value = event.target.value;
+          location.hash = "#/" + value;
+          this.currentPage = value;
+        },
+
+        goHome() {
+          location.hash = "#/home";
+        },
+
+        toggleDark() {
+          this.isDark = !this.isDark;
+          document.documentElement.classList.toggle("dark");
+        },
+
+        toggleSnow() {
+          this.snowEnabled = !this.snowEnabled;
+          snowEnabled = this.snowEnabled;
+        },
+
+        toggleChaos() {
+          this.chaosMode = !this.chaosMode;
+          if (this.chaosMode) {
+            submitSound.play();
+            confetti({
+              particleCount: 50,
+              spread: 100,
+              origin: { y: 0.6 },
+              colors: ['#000000', '#FF0000']
+            });
+          }
+        },
+
+        hasVoted(id) {
+          return this.votedItems.includes(id);
+        },
+
+        async submitSite() {
+          if (this.competitionEnded) {
+            alert("Submissions are closed!");
+            return;
+          }
+
+          // Validation
+          if (this.submitMode === 'url' && !this.form.url.startsWith("https://")) {
+            alert("URL must start with https://");
+            return;
+          }
+          if (this.submitMode === 'code' && !this.form.code.trim()) {
+            alert("Please paste some code!");
+            return;
+          }
+
+          try {
+            const payload = {
+              title: this.form.title.trim(),
+              type: this.submitMode, // 'url' or 'code'
+              votes: 0,
+              submittedAt: new Date()
+            };
+
+            if (this.submitMode === 'url') {
+              payload.url = this.form.url.trim();
+            } else {
+              payload.code = this.form.code;
+            }
+
+            await addDoc(colRef, payload);
+
+            submitSound.currentTime = 0;
+            submitSound.play();
+            alert("Entry submitted! Good luck!");
+            this.form.title = "";
+            this.form.url = "";
+            this.form.code = "";
+            this.goHome();
+          } catch (e) {
+            console.error(e);
+            alert("Error submitting entry.");
+          }
+        },
+
+        async vote(id, event) {
+          if (this.competitionEnded) {
+            alert("Voting is closed!");
+            return;
+          }
+
+          // Anti-spam / Race condition check
+          if (this.processingVotes.has(id)) return;
+
+          // Double check persisted state
+          const voted = JSON.parse(localStorage.getItem("voted") || "[]");
+          if (voted.includes(id)) {
+            alert("You've already voted for this masterpiece! 🚫");
+            this.votedItems = voted; // Sync state just in case
+            return;
+          }
+
+          this.processingVotes.add(id);
+
+          try {
+            // Optimistic Update: Mark as voted immediately in local state & storage
+            // This prevents clicking again while the network request is pending.
+            this.votedItems.push(id);
+            voted.push(id);
+            localStorage.setItem("voted", JSON.stringify(voted));
+
+            voteSound.currentTime = 0;
+            voteSound.play();
+
+            const rect = event.target.getBoundingClientRect();
+            const x = (rect.left + rect.width / 2) / window.innerWidth;
+            const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+            confetti({
+              particleCount: 100,
+              spread: 70,
+              origin: { x, y },
+              shapes: ['circle', 'square'],
+              colors: ['#FFC0CB', '#FFD700', '#00FFFF'],
+              disableForReducedMotion: true
+            });
+
+            const ref = doc(db, "websites", id);
+            await updateDoc(ref, { votes: increment(1) });
+
+          } catch (e) {
+            console.error(e);
+            alert("Error casting vote. Try again!");
+            // Rollback optimistic update on error
+            this.votedItems = this.votedItems.filter(v => v !== id);
+            const newVoted = JSON.parse(localStorage.getItem("voted") || "[]").filter(v => v !== id);
+            localStorage.setItem("voted", JSON.stringify(newVoted));
+          } finally {
+            this.processingVotes.delete(id);
+          }
+        },
+
+        loginAdmin() {
+          if (this.adminPass === "connx2025") {
+            this.adminAuth = true;
+            tadaSound.play();
+          } else {
+            alert("Wrong password. Nice try hacker! 🕵️‍♂️");
+          }
+        },
+
+        async deleteEntry(id) {
+          if (!confirm("Are you sure? This action is permanent.")) return;
+          try {
+            await deleteDoc(doc(db, "websites", id));
+          } catch (e) {
+            alert("Error deleting.");
+          }
+        },
+
+        updateCountdown() {
+          const targetDate = new Date("December 11, 2025 15:00:00 EST").getTime();
+          const now = new Date().getTime();
+          const distance = targetDate - now;
+
+          if (distance < 0) {
+            this.countdownString = "Winners Announced! 🎉";
+            this.competitionEnded = true; // Auto-hide submit/vote
+            return;
+          } else {
+            this.competitionEnded = false;
+          }
+
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+          this.countdownString = `${days}d ${hours}h ${minutes}m`;
+        }
+      },
+
+      mounted() {
+        window.addEventListener("hashchange", this.handleRoute);
+        this.handleRoute();
+
+        // Load initial voted state
+        this.votedItems = JSON.parse(localStorage.getItem("voted") || "[]");
+
+        onSnapshot(colRef, (snapshot) => {
+          this.websites = snapshot.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+          }));
+        });
+
+        this.updateCountdown();
+        this.timerInterval = setInterval(this.updateCountdown, 1000); // Check every second for better precision near the end
+
+        // Konami Code
+        let kKeys = [];
+        const konami = "38,38,40,40,37,39,37,39,66,65";
+        document.addEventListener("keydown", (e) => {
+          kKeys.push(e.keyCode);
+          if (kKeys.toString().indexOf(konami) >= 0) {
+            kKeys = [];
+            tadaSound.play();
+            alert("🌟 KONAMI CODE ACTIVATED! YOU ARE A LEGEND! 🌟");
+          }
+        });
+      },
+
+      unmounted() {
+        if (this.timerInterval) clearInterval(this.timerInterval);
+      }
+    }).mount("#app");
+  </script>
 </body>
+
 </html>
