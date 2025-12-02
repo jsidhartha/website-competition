@@ -246,14 +246,14 @@
     <nav
       class="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 dark:from-indigo-900 dark:via-purple-900 dark:to-pink-900 p-3 shadow-2xl sticky top-0 z-50 backdrop-blur-md bg-opacity-90">
       <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
-        <h1 @click="goHome"
+        <h1 @click="setPage('home')"
           class="text-white text-xl md:text-2xl font-extrabold drop-shadow-lg cursor-pointer flex items-center gap-2 hover:scale-105 transition-transform">
           <span class="text-3xl">🎉</span>
           <span>ConnX Holiday '25</span>
         </h1>
 
         <!-- Countdown Timer -->
-        <div @dblclick="currentPage = 'admin'; location.hash='#/admin'"
+        <div @dblclick="setPage('admin')"
           class="hidden lg:flex items-center gap-2 text-white bg-white/20 px-4 py-1 rounded-full text-xs font-mono border border-white/30 shadow-inner cursor-help select-none"
           title="Double click for secret admin access">
           <span>🏆 Winners Revealed in:</span>
@@ -265,12 +265,16 @@
           <ul class="hidden md:flex gap-4 text-white font-bold text-sm uppercase tracking-wide">
             <li><a href="#/home" :class="{'text-yellow-300 underline': currentPage === 'home'}"
                 class="hover:text-yellow-200 transition-colors">Vote</a></li>
-            <!-- HIDE SUBMIT IF COMPETITION IS OVER -->
+            
+            <!-- Submit (Public) -->
             <li v-if="!competitionEnded"><a href="#/submit"
                 :class="{'text-yellow-300 underline': currentPage === 'submit'}"
                 class="hover:text-yellow-200 transition-colors">Submit</a></li>
-            <li><a href="#/winners" :class="{'text-yellow-300 underline': currentPage === 'winners'}"
-                class="hover:text-yellow-200 transition-colors">Leaderboard</a></li>
+            
+            <!-- Dashboard (Admin Only) -->
+            <li v-if="adminAuth"><a href="#/admin"
+                :class="{'text-yellow-300 underline': currentPage === 'admin'}"
+                class="hover:text-yellow-200 transition-colors">Dashboard</a></li>
           </ul>
 
           <!-- Mobile Nav -->
@@ -278,9 +282,8 @@
             class="md:hidden bg-white/20 text-white rounded-lg px-2 py-1 text-sm border-none outline-none focus:ring-2 focus:ring-yellow-300 cursor-pointer"
             @change="navigate($event)" :value="currentPage">
             <option class="text-black" value="home">Vote</option>
-            <!-- HIDE SUBMIT IF COMPETITION IS OVER -->
             <option v-if="!competitionEnded" class="text-black" value="submit">Submit</option>
-            <option class="text-black" value="winners">Leaderboard</option>
+            <option v-if="adminAuth" class="text-black" value="admin">Dashboard</option>
           </select>
 
           <!-- Chaos Toggle -->
@@ -337,7 +340,6 @@
                 class="mt-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 max-w-2xl mx-auto rounded shadow-lg"
                 role="alert">
                 <p class="font-bold">🚫 Voting is Closed!</p>
-                <p>The competition has ended. Check the Leaderboard to see the winners!</p>
               </div>
 
               <div class="absolute -top-4 -right-4 md:right-20 animate-bounce hidden md:block text-4xl">👇</div>
@@ -346,7 +348,7 @@
             <div v-if="websites.length === 0"
               class="text-center p-12 bg-white/50 dark:bg-black/20 rounded-3xl backdrop-blur-sm">
               <p class="text-2xl text-gray-500">No entries yet! Be the first to submit chaos. 😈</p>
-              <button v-if="!competitionEnded" @click="currentPage = 'submit'; location.hash='#/submit'"
+              <button v-if="!competitionEnded" @click="setPage('submit')"
                 class="mt-4 bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition">
                 Submit Now
               </button>
@@ -394,24 +396,18 @@
                     </iframe>
                   </div>
 
-                  <div class="mt-auto flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-3 rounded-2xl">
+                  <!-- ACTION BAR (Score hidden as requested) -->
+                  <div class="mt-auto flex items-center justify-center bg-gray-100 dark:bg-gray-800 p-3 rounded-2xl">
                     <button :disabled="competitionEnded || hasVoted(site.id)" @click="vote(site.id, $event)" :class="[
                         competitionEnded || hasVoted(site.id) ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 hover:scale-105',
                         hasVoted(site.id) ? '!bg-green-500 !from-green-500 !to-green-600' : ''
                       ]"
-                      class="text-white px-6 py-2 rounded-xl shadow-lg transform active:scale-95 transition-all font-bold flex items-center gap-2 group/btn">
+                      class="w-full text-white px-6 py-3 rounded-xl shadow-lg transform active:scale-95 transition-all font-bold flex justify-center items-center gap-2 group/btn">
                       <span>{{ hasVoted(site.id) ? '✅ Voted' : (competitionEnded ? 'Closed 🔒' : '👍 Vote') }}</span>
                       <span v-if="!competitionEnded && !hasVoted(site.id)"
                         class="group-hover/btn:animate-bounce">🔥</span>
                     </button>
-
-                    <div class="flex flex-col items-end">
-                      <span class="text-xs uppercase tracking-wider text-gray-500">Current Score</span>
-                      <span
-                        class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 font-mono">
-                        {{ site.votes ?? 0 }}
-                      </span>
-                    </div>
+                    <!-- SCORE HIDDEN FROM PUBLIC VIEW -->
                   </div>
                 </div>
               </div>
@@ -438,7 +434,7 @@
                 Submit Entry 🚀
               </h2>
               <p class="text-center text-gray-600 dark:text-gray-400 mb-8 relative z-10">
-                Ready to unleash your chaotic masterpiece?
+                All fields are mandatory. Show us what you got!
               </p>
 
               <!-- Submission Mode Toggle -->
@@ -458,32 +454,52 @@
               </div>
 
               <form @submit.prevent="submitSite" class="flex flex-col gap-6 relative z-10">
+                
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="group">
+                    <label class="block text-sm font-bold mb-1 text-gray-700 dark:text-gray-300">First Name <span class="text-red-500">*</span></label>
+                    <input v-model="form.firstName" placeholder="John"
+                      class="w-full border-2 border-gray-200 dark:border-gray-700 p-3 rounded-xl dark:bg-gray-800 focus:border-blue-500 focus:outline-none transition-all"
+                      required />
+                  </div>
+                  <div class="group">
+                    <label class="block text-sm font-bold mb-1 text-gray-700 dark:text-gray-300">Last Name <span class="text-red-500">*</span></label>
+                    <input v-model="form.lastName" placeholder="Doe"
+                      class="w-full border-2 border-gray-200 dark:border-gray-700 p-3 rounded-xl dark:bg-gray-800 focus:border-blue-500 focus:outline-none transition-all"
+                      required />
+                  </div>
+                </div>
+
                 <div class="group">
-                  <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Widget Title</label>
-                  <input v-model="form.title" placeholder="e.g. The Impossible Slider"
-                    class="w-full border-2 border-gray-200 dark:border-gray-700 p-4 rounded-xl dark:bg-gray-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 focus:outline-none transition-all font-lg"
+                  <label class="block text-sm font-bold mb-1 text-gray-700 dark:text-gray-300">Email Address <span class="text-red-500">*</span></label>
+                  <input type="email" v-model="form.email" placeholder="john.doe@example.com"
+                    class="w-full border-2 border-gray-200 dark:border-gray-700 p-3 rounded-xl dark:bg-gray-800 focus:border-blue-500 focus:outline-none transition-all"
                     required />
-                  <p class="text-xs text-gray-500 mt-1 ml-1 group-hover:text-blue-500 transition-colors">No personal
-                    names in the title, please!</p>
+                </div>
+
+                <div class="group">
+                  <label class="block text-sm font-bold mb-1 text-gray-700 dark:text-gray-300">Widget Title <span class="text-red-500">*</span></label>
+                  <input v-model="form.title" placeholder="e.g. The Impossible Slider"
+                    class="w-full border-2 border-gray-200 dark:border-gray-700 p-3 rounded-xl dark:bg-gray-800 focus:border-blue-500 focus:outline-none transition-all"
+                    required />
                 </div>
 
                 <!-- URL Input -->
                 <div v-if="submitMode === 'url'">
-                  <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">GitHub Pages URL</label>
+                  <label class="block text-sm font-bold mb-1 text-gray-700 dark:text-gray-300">GitHub Pages URL <span class="text-red-500">*</span></label>
                   <input v-model="form.url" placeholder="https://yourname.github.io/bad-ui-widget"
-                    class="w-full border-2 border-gray-200 dark:border-gray-700 p-4 rounded-xl dark:bg-gray-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 focus:outline-none transition-all font-mono text-sm"
+                    class="w-full border-2 border-gray-200 dark:border-gray-700 p-3 rounded-xl dark:bg-gray-800 focus:border-blue-500 focus:outline-none transition-all font-mono text-sm"
                     required />
                 </div>
 
                 <!-- Code Input -->
                 <div v-if="submitMode === 'code'">
-                  <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Paste Your Code
-                    (HTML/CSS/JS)</label>
+                  <label class="block text-sm font-bold mb-1 text-gray-700 dark:text-gray-300">Paste Your Code
+                    (HTML/CSS/JS) <span class="text-red-500">*</span></label>
                   <textarea v-model="form.code" rows="8"
                     placeholder="<!DOCTYPE html><html><body><button>Click Me</button></body></html>"
-                    class="w-full border-2 border-gray-200 dark:border-gray-700 p-4 rounded-xl dark:bg-gray-800 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 focus:outline-none transition-all font-mono text-xs"
+                    class="w-full border-2 border-gray-200 dark:border-gray-700 p-3 rounded-xl dark:bg-gray-800 focus:border-purple-500 focus:outline-none transition-all font-mono text-xs"
                     required></textarea>
-                  <p class="text-xs text-gray-500 mt-2">Code will be rendered directly in the iframe.</p>
                 </div>
 
                 <button
@@ -497,19 +513,6 @@
                   <span class="relative z-10">Submit to the Chaos</span> <span class="relative z-10">📤</span>
                 </button>
               </form>
-
-              <!-- Rules Box -->
-              <div
-                class="mt-8 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800">
-                <h3 class="font-bold text-blue-800 dark:text-blue-300 mb-2 flex items-center gap-2">
-                  <span>📌</span> Guidelines
-                </h3>
-                <ul class="text-sm space-y-2 text-blue-900 dark:text-blue-200">
-                  <li class="flex gap-2"><span>✅</span> Theme: "Rate Your Ride" (Transit Feedback)</li>
-                  <li class="flex gap-2"><span>✅</span> Dimensions: Optimized for 500x350px</li>
-                  <li class="flex gap-2"><span>✅</span> Vibe: Funny, annoying, but workplace safe</li>
-                </ul>
-              </div>
 
               <!-- Preview -->
               <div v-if="previewContent" class="mt-8">
@@ -529,121 +532,12 @@
             </div>
           </section>
 
-          <!-- WINNERS / LEADERBOARD PAGE -->
-          <section v-else-if="currentPage === 'winners'" class="max-w-4xl mx-auto">
-            <div class="text-center mb-10">
-              <h2 class="text-4xl md:text-5xl font-black text-green-600 dark:text-green-400 mb-2">
-                Hall of Chaos 🏅
-              </h2>
-              <p class="text-gray-600 dark:text-gray-400">
-                The most frustrating user experiences, ranked.
-              </p>
-            </div>
-
-            <!-- PODIUM SECTION (Only shows if we have winners) -->
-            <div v-if="sortedWinners.length > 0" class="podium-container pt-8 hidden sm:flex">
-
-              <!-- 2nd Place (Silver) -->
-              <div v-if="sortedWinners[1]" class="podium-step podium-2 w-1/4">
-                <div class="mb-2 text-center">
-                  <div
-                    class="w-16 h-16 mx-auto bg-gray-200 rounded-full border-4 border-gray-300 flex items-center justify-center text-2xl shadow-lg mb-2">
-                    🥈</div>
-                  <h4 class="font-bold text-sm truncate w-full">{{ sortedWinners[1].title }}</h4>
-                  <p class="text-xs text-gray-500">{{ sortedWinners[1].votes }} votes</p>
-                </div>
-                <div class="podium-block w-full">2</div>
-              </div>
-
-              <!-- 1st Place (Gold) -->
-              <div v-if="sortedWinners[0]" class="podium-step podium-1 w-1/3 z-10">
-                <!-- Crown -->
-                <div class="text-5xl mb-2 animate-bounce">👑</div>
-                <div class="mb-2 text-center">
-                  <div
-                    class="w-20 h-20 mx-auto bg-yellow-100 rounded-full border-4 border-yellow-400 flex items-center justify-center text-4xl shadow-lg mb-2">
-                    🥇</div>
-                  <h4 class="font-bold text-lg truncate w-full">{{ sortedWinners[0].title }}</h4>
-                  <p class="text-sm text-yellow-600 font-bold">{{ sortedWinners[0].votes }} votes</p>
-                </div>
-                <div class="podium-block w-full">1</div>
-              </div>
-
-              <!-- 3rd Place (Bronze) -->
-              <div v-if="sortedWinners[2]" class="podium-step podium-3 w-1/4">
-                <div class="mb-2 text-center">
-                  <div
-                    class="w-16 h-16 mx-auto bg-orange-100 rounded-full border-4 border-orange-300 flex items-center justify-center text-2xl shadow-lg mb-2">
-                    🥉</div>
-                  <h4 class="font-bold text-sm truncate w-full">{{ sortedWinners[2].title }}</h4>
-                  <p class="text-xs text-gray-500">{{ sortedWinners[2].votes }} votes</p>
-                </div>
-                <div class="podium-block w-full">3</div>
-              </div>
-            </div>
-
-            <!-- LIST SECTION (For everyone else, or mobile view) -->
-            <div
-              class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-              <div class="p-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
-                <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-gray-500">
-                  <span>Rank & Entry</span>
-                  <span>Votes</span>
-                </div>
-              </div>
-
-              <ul>
-                <li v-for="(site, i) in sortedWinners" :key="site.id"
-                  class="group flex justify-between items-center p-4 sm:p-6 border-b border-gray-100 dark:border-gray-800 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors">
-
-                  <div class="flex items-center gap-4 sm:gap-6">
-                    <!-- Rank Badges -->
-                    <div class="w-12 flex justify-center flex-shrink-0">
-                      <div v-if="i < 3"
-                        class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full text-sm sm:text-xl font-bold shadow-md border-2 border-white text-white transform group-hover:scale-110 transition-transform"
-                        :class="{
-                          'bg-yellow-400': i === 0,
-                          'bg-gray-400': i === 1,
-                          'bg-orange-400': i === 2
-                        }">
-                        {{ i + 1 }}
-                      </div>
-                      <span v-else class="text-gray-400 font-mono text-xl font-bold pt-1">#{{ i + 1 }}</span>
-                    </div>
-
-                    <div class="overflow-hidden">
-                      <h4 class="font-bold text-md sm:text-xl truncate">{{ site.title }}</h4>
-                      <a v-if="site.type === 'url'" :href="site.url" target="_blank"
-                        class="text-xs text-gray-400 hover:text-blue-500 flex items-center gap-1">
-                        View Site
-                        <span class="opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
-                      </a>
-                      <span v-else class="text-xs text-gray-400 flex items-center gap-1">
-                        &lt;/&gt; Embedded
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="text-right flex-shrink-0 pl-2">
-                    <span class="block text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400 font-mono">
-                      {{ site.votes ?? 0 }}
-                    </span>
-                  </div>
-                </li>
-              </ul>
-
-              <div v-if="websites.length === 0" class="p-8 text-center text-gray-500">
-                No votes yet. The board is empty! 🕸️
-              </div>
-            </div>
-          </section>
-
-          <!-- ADMIN PAGE -->
-          <section v-else-if="currentPage === 'admin'" class="max-w-4xl mx-auto">
+          <!-- ADMIN DASHBOARD (Combined Leaderboard + Management) -->
+          <section v-else-if="currentPage === 'admin'" class="max-w-6xl mx-auto">
             <div v-if="!adminAuth"
               class="max-w-md mx-auto bg-white/90 dark:bg-gray-900/90 p-8 rounded-3xl shadow-xl text-center">
               <div class="text-5xl mb-4">🔐</div>
-              <h2 class="text-2xl font-bold mb-4">Admin Access</h2>
+              <h2 class="text-2xl font-bold mb-4">Admin Dashboard</h2>
               <form @submit.prevent="loginAdmin" class="flex gap-2">
                 <input v-model="adminPass" type="password" placeholder="Password..."
                   class="flex-1 border p-3 rounded-xl dark:bg-gray-800" />
@@ -658,30 +552,144 @@
                 <h2 class="text-3xl font-bold text-purple-600 dark:text-purple-300 flex items-center gap-2">
                   🛠 Dashboard
                 </h2>
-                <button @click="adminAuth = false" class="text-sm text-red-500 hover:underline">Logout</button>
+                <div class="flex gap-4">
+                  <button @click="setPage('home')" class="text-sm text-gray-500 hover:text-purple-500">Browse Sites</button>
+                  <button @click="adminAuth = false; localStorage.removeItem('adminAuth')" class="text-sm text-red-500 hover:underline">Logout</button>
+                </div>
               </div>
 
-              <div class="grid gap-4">
-                <div v-for="site in websites" :key="site.id"
-                  class="bg-white/90 dark:bg-gray-900/90 p-4 rounded-2xl shadow border-l-4 border-purple-500 flex flex-col md:flex-row justify-between items-center gap-4">
-                  <div class="flex-1 overflow-hidden">
-                    <h3 class="font-bold text-lg">{{ site.title }}</h3>
-                    <p class="text-xs text-gray-500 truncate">
-                      {{ site.type === 'url' ? site.url : 'Embedded Code' }}
-                    </p>
+              <!-- STATS CARDS -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow border-l-4 border-blue-500">
+                  <span class="block text-gray-500 text-xs uppercase">Total Submissions</span>
+                  <span class="text-2xl font-bold">{{ websites.length }}</span>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow border-l-4 border-green-500">
+                  <span class="block text-gray-500 text-xs uppercase">Unique Participants</span>
+                  <span class="text-2xl font-bold">{{ uniqueUsers.length }}</span>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow border-l-4 border-yellow-500">
+                  <span class="block text-gray-500 text-xs uppercase">Top Vote</span>
+                  <span class="text-2xl font-bold">{{ websites.length > 0 ? Math.max(...websites.map(s => s.votes||0)) : 0 }}</span>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow border-l-4 border-purple-500">
+                  <span class="block text-gray-500 text-xs uppercase">Days Left</span>
+                  <span class="text-2xl font-bold">{{ countdownString.split(' ')[0] }}</span>
+                </div>
+              </div>
+
+              <!-- LEADERBOARD SECTION -->
+              <div class="bg-white/90 dark:bg-gray-900/90 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 mb-8">
+                <div class="p-6 border-b border-gray-100 dark:border-gray-800 bg-purple-50 dark:bg-purple-900/20">
+                  <h3 class="font-bold text-xl text-purple-700 dark:text-purple-300">🏆 Official Standings (All Unique Users)</h3>
+                </div>
+                
+                <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <!-- Full Leaderboard List -->
+                  <div>
+                    <h4 class="font-bold mb-4 text-gray-500 uppercase text-xs">Winners (Highest to Lowest)</h4>
+                    <ul class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                      <li v-for="(site, i) in uniqueLeaderboard" :key="site.id" class="flex items-center gap-4 bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-full font-bold shadow-md"
+                             :class="i===0 ? 'bg-yellow-400 text-white' : i===1 ? 'bg-gray-400 text-white' : i===2 ? 'bg-orange-400 text-white' : 'bg-gray-200 text-gray-600'">
+                             {{ i + 1 }}
+                        </div>
+                        <div class="flex-1">
+                          <p class="font-bold truncate">{{ site.title }}</p>
+                          <p class="text-xs text-gray-500">{{ site.firstName }} {{ site.lastName }}</p>
+                        </div>
+                        <div class="font-mono font-bold text-xl">{{ site.votes }}</div>
+                      </li>
+                      <li v-if="uniqueLeaderboard.length === 0" class="text-gray-400 italic text-sm">Waiting for votes...</li>
+                    </ul>
                   </div>
-                  <div class="flex items-center gap-6">
-                    <div class="text-center">
-                      <span class="block text-xs text-gray-500">Votes</span>
-                      <span class="font-bold text-xl">{{ site.votes ?? 0 }}</span>
+
+                  <!-- 4th and 5th Selectors -->
+                  <div class="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
+                    <h4 class="font-bold mb-4 text-gray-500 uppercase text-xs">Honorable Mentions (Auto-Adjust Votes)</h4>
+                    
+                    <div class="mb-4">
+                      <label class="block text-sm font-bold mb-1">4th Place Selection</label>
+                      <select class="w-full p-2 rounded-lg border dark:bg-gray-800 text-sm" @change="setHonorable(4, $event.target.value)">
+                        <option value="">-- Select Site --</option>
+                        <option v-for="site in websites" :key="site.id" :value="site.id">
+                          {{ site.title }} ({{site.firstName}} {{site.lastName}}) - Currently: {{site.votes}}
+                        </option>
+                      </select>
+                      <p class="text-xs text-gray-400 mt-1">Selecting sets votes to: {{ uniqueLeaderboard.length >= 3 ? uniqueLeaderboard[2].votes - 1 : 'N/A' }}</p>
                     </div>
-                    <button @click="deleteEntry(site.id)"
-                      class="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-lg transition-colors" title="Delete">
-                      🗑️
-                    </button>
+
+                    <div>
+                      <label class="block text-sm font-bold mb-1">5th Place Selection</label>
+                      <select class="w-full p-2 rounded-lg border dark:bg-gray-800 text-sm" @change="setHonorable(5, $event.target.value)">
+                        <option value="">-- Select Site --</option>
+                        <option v-for="site in websites" :key="site.id" :value="site.id">
+                          {{ site.title }} ({{site.firstName}} {{site.lastName}}) - Currently: {{site.votes}}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              <!-- DATA MANAGEMENT TABLE -->
+              <div class="bg-white/90 dark:bg-gray-900/90 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+                <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+                  <h3 class="font-bold text-lg">Submission Management (Ranked)</h3>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm text-left">
+                    <thead class="bg-gray-50 dark:bg-gray-800 text-gray-500 uppercase text-xs">
+                      <tr>
+                        <th class="px-6 py-3">User</th>
+                        <th class="px-6 py-3">Email</th>
+                        <th class="px-6 py-3">Title</th>
+                        <th class="px-6 py-3">Votes</th>
+                        <th class="px-6 py-3">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Using sortedWinners instead of websites to show ranked list -->
+                      <tr v-for="site in sortedWinners" :key="site.id" class="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                        
+                        <!-- EDIT MODE -->
+                        <template v-if="editingId === site.id">
+                          <td class="px-6 py-4">
+                            <input v-model="editForm.firstName" class="border p-1 rounded w-20 text-xs dark:bg-gray-700" placeholder="First">
+                            <input v-model="editForm.lastName" class="border p-1 rounded w-20 text-xs dark:bg-gray-700" placeholder="Last">
+                          </td>
+                          <td class="px-6 py-4">
+                            <input v-model="editForm.email" class="border p-1 rounded w-full text-xs dark:bg-gray-700">
+                          </td>
+                          <td class="px-6 py-4">
+                            <span class="text-xs text-gray-400">{{ site.title }}</span>
+                          </td>
+                          <td class="px-6 py-4">
+                            <input type="number" v-model.number="editForm.votes" class="border p-1 rounded w-16 text-xs dark:bg-gray-700">
+                          </td>
+                          <td class="px-6 py-4 flex gap-2">
+                            <button @click="saveEdit(site.id)" class="text-green-600 font-bold hover:underline">Save</button>
+                            <button @click="editingId = null" class="text-gray-500 hover:underline">Cancel</button>
+                          </td>
+                        </template>
+
+                        <!-- VIEW MODE -->
+                        <template v-else>
+                          <td class="px-6 py-4 font-bold">{{ site.firstName }} {{ site.lastName }}</td>
+                          <td class="px-6 py-4 text-gray-500">{{ site.email }}</td>
+                          <td class="px-6 py-4 truncate max-w-xs">{{ site.title }}</td>
+                          <td class="px-6 py-4 font-mono font-bold">{{ site.votes || 0 }}</td>
+                          <td class="px-6 py-4 flex gap-3">
+                            <button @click="startEdit(site)" class="text-blue-500 hover:text-blue-700 font-bold">Edit</button>
+                            <button @click="deleteEntry(site.id)" class="text-red-500 hover:text-red-700">🗑️</button>
+                          </td>
+                        </template>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
             </div>
           </section>
 
@@ -710,6 +718,7 @@
       onSnapshot
     } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
+    // UPDATED FIREBASE KEYS FROM YOUR SCREENSHOT
     const firebaseConfig = {
       apiKey: "AIzaSyDlR4QxTG6EGwkHXJgQE-_WS-33cs9ytZY",
       authDomain: "website-competition-fd59e.firebaseapp.com",
@@ -816,9 +825,16 @@
           currentPage: "home",
           websites: [],
           submitMode: "url", // 'url' or 'code'
-          form: { title: "", url: "", code: "" },
-          adminAuth: false,
+          // UPDATED FORM DATA
+          form: { firstName: "", lastName: "", email: "", title: "", url: "", code: "" },
+          
+          adminAuth: localStorage.getItem('adminAuth') === 'true',
           adminPass: "",
+          
+          // ADMIN EDITING STATE
+          editingId: null,
+          editForm: {},
+
           snowEnabled: true,
           isDark: false,
           chaosMode: false,
@@ -831,9 +847,33 @@
       },
 
       computed: {
+        // Returns ALL websites sorted by vote
         sortedWinners() {
           return [...this.websites].sort((a, b) => (b.votes ?? 0) - (a.votes ?? 0));
         },
+        
+        // Returns Unique Users for Top 3 (Based on Email)
+        uniqueLeaderboard() {
+            const sorted = this.sortedWinners;
+            const unique = [];
+            const seenEmails = new Set();
+            
+            for (const site of sorted) {
+                // REMOVED THE LIMIT OF 3
+                if (site.email && !seenEmails.has(site.email)) {
+                    unique.push(site);
+                    seenEmails.add(site.email);
+                }
+            }
+            return unique;
+        },
+
+        // Returns List of Unique Users total
+        uniqueUsers() {
+            const emails = this.websites.map(s => s.email).filter(Boolean);
+            return [...new Set(emails)];
+        },
+
         previewContent() {
           if (this.submitMode === 'url') {
             return (this.form.url && this.form.url.startsWith("https://")) ? this.form.url : "";
@@ -857,6 +897,11 @@
 
         goHome() {
           location.hash = "#/home";
+        },
+
+        setPage(page) {
+          this.currentPage = page;
+          window.location.hash = '#/' + page;
         },
 
         toggleDark() {
@@ -893,6 +938,11 @@
           }
 
           // Validation
+          if (!this.form.firstName || !this.form.lastName || !this.form.email || !this.form.title) {
+            alert("All fields marked with * are mandatory!");
+            return;
+          }
+
           if (this.submitMode === 'url' && !this.form.url.startsWith("https://")) {
             alert("URL must start with https://");
             return;
@@ -904,6 +954,9 @@
 
           try {
             const payload = {
+              firstName: this.form.firstName.trim(),
+              lastName: this.form.lastName.trim(),
+              email: this.form.email.trim(),
               title: this.form.title.trim(),
               type: this.submitMode, // 'url' or 'code'
               votes: 0,
@@ -921,9 +974,8 @@
             submitSound.currentTime = 0;
             submitSound.play();
             alert("Entry submitted! Good luck!");
-            this.form.title = "";
-            this.form.url = "";
-            this.form.code = "";
+            // Reset Form
+            this.form = { firstName: "", lastName: "", email: "", title: "", url: "", code: "" };
             this.goHome();
           } catch (e) {
             console.error(e);
@@ -937,22 +989,18 @@
             return;
           }
 
-          // Anti-spam / Race condition check
           if (this.processingVotes.has(id)) return;
 
-          // Double check persisted state
           const voted = JSON.parse(localStorage.getItem("voted") || "[]");
           if (voted.includes(id)) {
             alert("You've already voted for this masterpiece! 🚫");
-            this.votedItems = voted; // Sync state just in case
+            this.votedItems = voted;
             return;
           }
 
           this.processingVotes.add(id);
 
           try {
-            // Optimistic Update: Mark as voted immediately in local state & storage
-            // This prevents clicking again while the network request is pending.
             this.votedItems.push(id);
             voted.push(id);
             localStorage.setItem("voted", JSON.stringify(voted));
@@ -979,7 +1027,6 @@
           } catch (e) {
             console.error(e);
             alert("Error casting vote. Try again!");
-            // Rollback optimistic update on error
             this.votedItems = this.votedItems.filter(v => v !== id);
             const newVoted = JSON.parse(localStorage.getItem("voted") || "[]").filter(v => v !== id);
             localStorage.setItem("voted", JSON.stringify(newVoted));
@@ -988,9 +1035,11 @@
           }
         },
 
+        // --- ADMIN FUNCTIONS ---
         loginAdmin() {
           if (this.adminPass === "connx2025") {
             this.adminAuth = true;
+            localStorage.setItem('adminAuth', 'true');
             tadaSound.play();
           } else {
             alert("Wrong password. Nice try hacker! 🕵️‍♂️");
@@ -1006,6 +1055,63 @@
           }
         },
 
+        startEdit(site) {
+          this.editingId = site.id;
+          this.editForm = { ...site };
+        },
+
+        async saveEdit(id) {
+          try {
+            const ref = doc(db, "websites", id);
+            await updateDoc(ref, {
+              firstName: this.editForm.firstName,
+              lastName: this.editForm.lastName,
+              email: this.editForm.email,
+              votes: parseInt(this.editForm.votes)
+            });
+            this.editingId = null;
+            alert("Updated successfully");
+          } catch(e) {
+            alert("Error updating");
+          }
+        },
+
+        async setHonorable(rank, siteId) {
+            if (!siteId) return;
+            // Logic: 
+            // 4th Place Vote = (3rd Place Vote) - 1
+            // 5th Place Vote = (4th Place Vote) - 1
+            // Note: This forces the order in the sorted list.
+            
+            const sorted = this.sortedWinners;
+            let targetVotes = 0;
+
+            if (rank === 4) {
+               // Get vote count of 3rd place (index 2) from Unique List if possible, else raw list
+               // User wants "Top of 4" based on Unique Top 3.
+               const thirdPlace = this.uniqueLeaderboard[2];
+               if (thirdPlace) {
+                 targetVotes = Math.max(0, thirdPlace.votes - 1);
+               } else if (sorted.length > 0) {
+                 // Fallback if less than 3 unique users
+                 targetVotes = Math.max(0, sorted[sorted.length-1].votes - 1); 
+               }
+            } else if (rank === 5) {
+               // We need the CURRENT 4th place votes.
+               // Since we might have just updated 4th, we should ideally wait or calc dynamically.
+               // For simplicity: Find the site at index 3 (4th place) in sorted list
+               const fourthPlace = sorted[3]; 
+               if (fourthPlace) {
+                   targetVotes = Math.max(0, fourthPlace.votes - 1);
+               }
+            }
+
+            if (confirm(`Set rank ${rank} for this site? This will update its votes to ${targetVotes}.`)) {
+                const ref = doc(db, "websites", siteId);
+                await updateDoc(ref, { votes: targetVotes });
+            }
+        },
+
         updateCountdown() {
           const targetDate = new Date("December 11, 2025 15:00:00 EST").getTime();
           const now = new Date().getTime();
@@ -1013,7 +1119,7 @@
 
           if (distance < 0) {
             this.countdownString = "Winners Announced! 🎉";
-            this.competitionEnded = true; // Auto-hide submit/vote
+            this.competitionEnded = true; 
             return;
           } else {
             this.competitionEnded = false;
@@ -1042,7 +1148,7 @@
         });
 
         this.updateCountdown();
-        this.timerInterval = setInterval(this.updateCountdown, 1000); // Check every second for better precision near the end
+        this.timerInterval = setInterval(this.updateCountdown, 1000); 
 
         // Konami Code
         let kKeys = [];
