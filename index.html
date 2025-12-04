@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConnX Holiday Competition 2025 - Bad UI Challenge</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Comic+Neue:wght@400;700&family=Bangers&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0f1c;
+            --bg-secondary: #131b2e;
+            --bg-card: #1a2540;
+            --accent-red: #ff4d6d;
+            --accent-orange: #ff8c42;
+            --accent-yellow: #ffd166;
+            --accent-green: #06d6a0;
+            --accent-blue: #118ab2;
+            --accent-purple: #9d4edd;
+            --accent-pink: #ff69b4;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --text-muted: #64748b;
+            --border-color: #2d3a52;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-decoration::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 20%, rgba(255, 77, 109, 0.1) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(157, 78, 221, 0.1) 0%, transparent 40%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .snowflakes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .snowflake {
+            position: absolute;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+            }
+        }
+
+        .bad-ui-banner {
+            background: linear-gradient(90deg, var(--accent-pink), var(--accent-purple), var(--accent-blue), var(--accent-green), var(--accent-yellow), var(--accent-orange), var(--accent-red));
+            background-size: 400% auto;
+            animation: gradientMove 3s linear infinite;
+            padding: 0.5rem;
+            text-align: center;
+            font-weight: 700;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+            font-family: 'Comic Neue', cursive;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% center;
+            }
+
+            100% {
+                background-position: 400% center;
+            }
+        }
+
+        .nav {
+            position: fixed;
+            top: 30px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 15, 28, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+
+        .logo:hover {
+            animation: logoWiggle 0.5s ease;
+        }
+
+        @keyframes logoWiggle {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-10deg);
+            }
+
+            75% {
+                transform: rotate(10deg);
+            }
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-green));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            animation: logoSpin 8s linear infinite;
+        }
+
+        @keyframes logoSpin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+        }
+
+        .nav-link:nth-child(2) {
+            transform: rotate(2deg);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 130px 2rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, rgba(255, 77, 109, 0.2), rgba(157, 78, 221, 0.2));
+            border: 2px dashed var(--accent-pink);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            color: var(--accent-yellow);
+            font-weight: 600;
+            animation: badgeBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes badgeBounce {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-1deg);
+            }
+
+            50% {
+                transform: translateY(-5px) rotate(1deg);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-orange), var(--accent-yellow), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Bangers', cursive;
+            letter-spacing: 2px;
+            animation: titleWobble 4s ease-in-out infinite;
+        }
+
+        @keyframes titleWobble {
+
+            0%,
+            100% {
+                transform: rotate(-1deg);
+            }
+
+            50% {
+                transform: rotate(1deg);
+            }
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto 1rem;
+            line-height: 1.6;
+        }
+
+        .organizer-info {
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 1rem 1.5rem;
+            display: inline-block;
+            margin-top: 1rem;
+            border: 2px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .organizer-info strong {
+            color: var(--accent-yellow);
+        }
+
+        .organizer-info .name {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 18px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent-purple);
+            box-shadow: 0 12px 40px rgba(157, 78, 221, 0.1);
+        }
+
+        .card.wonky {
+            transform: rotate(0.4deg);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .card-icon.submit {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+        }
+
+        .card-icon.vote {
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-orange));
+        }
+
+        .card-icon.admin {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .form-group .label-fun {
+            color: var(--accent-pink);
+            font-weight: 400;
+            font-size: 0.85rem;
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 4px rgba(157, 78, 221, 0.1);
+        }
+
+        .form-group input:focus {
+            animation: inputWiggle 0.3s ease;
+        }
+
+        @keyframes inputWiggle {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-2px);
+            }
+
+            75% {
+                transform: translateX(2px);
+            }
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 12px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(157, 78, 221, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--accent-green), #059669);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--error), #dc2626);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .preview-container {
+            margin-top: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 14px;
+            padding: 1.5rem;
+            border: 2px dashed var(--border-color);
+        }
+
+        .preview-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .preview-frame-wrapper {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 350px;
+        }
+
+        .preview-frame {
+            width: 500px;
+            height: 350px;
+            border: none;
+            border-radius: 12px;
+        }
+
+        .preview-placeholder {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .preview-placeholder span {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .voting-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .voting-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-family: 'Bangers', cursive;
+            letter-spacing: 2px;
+        }
+
+        .voter-input-container {
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+
+        .voter-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .voter-info input {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            width: 200px;
+        }
+
+        .entry-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .entry-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .entry-card:nth-child(odd) {
+            transform: rotate(0.5deg);
+        }
+
+        .entry-card:nth-child(even) {
+            transform: rotate(-0.5deg);
+        }
+
+        .entry-frame-wrapper {
+            background: white;
+            aspect-ratio: 500/350;
+            overflow: hidden;
+        }
+
+        .entry-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .entry-actions {
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .vote-btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .vote-btn:hover {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        .vote-btn.voted {
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-orange));
+            color: white;
+            border-color: transparent;
+        }
+
+        .admin-login {
+            max-width: 400px;
+            margin: 4rem auto;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .admin-tab {
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .admin-tab.active {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            border-color: transparent;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--bg-secondary);
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        tr:hover {
+            background: rgba(157, 78, 221, 0.05);
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .winners-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .winner-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 3px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .winner-card::after {
+            content: '👆 Click to view';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .winner-card:hover::after {
+            opacity: 1;
+        }
+
+        .winner-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .winner-card.first {
+            border-color: #ffd700;
+        }
+
+        .winner-card.second {
+            border-color: #c0c0c0;
+        }
+
+        .winner-card.third {
+            border-color: #cd7f32;
+        }
+
+        .winner-card.fourth {
+            border-color: var(--accent-purple);
+        }
+
+        .winner-card.fifth {
+            border-color: var(--accent-blue);
+        }
+
+        .winner-rank {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            font-family: 'Bangers', cursive;
+        }
+
+        .winner-rank.first {
+            background: linear-gradient(135deg, #ffd700, #ffb800);
+            color: #1a1a1a;
+            animation: goldShine 2s ease-in-out infinite;
+        }
+
+        @keyframes goldShine {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+            }
+        }
+
+        .winner-rank.second {
+            background: linear-gradient(135deg, #e0e0e0, #a0a0a0);
+            color: #1a1a1a;
+        }
+
+        .winner-rank.third {
+            background: linear-gradient(135deg, #cd7f32, #8b4513);
+            color: white;
+        }
+
+        .winner-rank.fourth {
+            background: linear-gradient(135deg, var(--accent-purple), #6b21a8);
+            color: white;
+        }
+
+        .winner-rank.fifth {
+            background: linear-gradient(135deg, var(--accent-blue), #0369a1);
+            color: white;
+        }
+
+        .winner-info {
+            flex: 1;
+        }
+
+        .winner-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .winner-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .winner-votes {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-green);
+        }
+
+        .winners-pending {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .winners-pending .pending-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: pendingBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes pendingBounce {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-5deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        .preview-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .preview-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .preview-modal {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 1.5rem;
+            max-width: 90vw;
+            width: 580px;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+            border: 3px solid var(--accent-purple);
+        }
+
+        .preview-modal-overlay.active .preview-modal {
+            transform: scale(1);
+        }
+
+        .preview-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .preview-modal-header h3 {
+            font-size: 1.2rem;
+            color: var(--accent-yellow);
+        }
+
+        .preview-modal-close {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 1.3rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .preview-modal-close:hover {
+            background: var(--error);
+            border-color: var(--error);
+            transform: rotate(90deg);
+        }
+
+        .preview-modal-frame-wrapper {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 500/350;
+        }
+
+        .preview-modal-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border-radius: 18px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            border: 2px solid var(--border-color);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.4rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--error);
+            transform: rotate(90deg);
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 4000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            animation: toastSlide 0.3s ease;
+            min-width: 280px;
+            border: 2px solid var(--border-color);
+        }
+
+        @keyframes toastSlide {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success {
+            border-color: var(--success);
+        }
+
+        .toast.error {
+            border-color: var(--error);
+        }
+
+        .toast.warning {
+            border-color: var(--warning);
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state span {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .submission-counter {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .submission-counter.warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .submission-counter.error {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--error);
+        }
+
+        .funny-disclaimer {
+            background: linear-gradient(135deg, rgba(255, 77, 109, 0.1), rgba(157, 78, 221, 0.1));
+            border: 2px dashed var(--accent-pink);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .funny-disclaimer strong {
+            color: var(--accent-yellow);
+        }
+
+        .fun-tip {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border-left: 4px solid var(--accent-yellow);
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .fun-tip strong {
+            color: var(--accent-yellow);
+        }
+
+        .winner-selection-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+        }
+
+        .winner-selection-row .rank-badge {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+            font-size: 1.1rem;
+        }
+
+        .winner-selection-row select {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-family: inherit;
+        }
+
+        .auto-badge {
+            background: var(--accent-green);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .manual-badge {
+            background: var(--accent-orange);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: confettiFall 3s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-content {
+                justify-content: center;
+            }
+
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .winner-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .winner-selection-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-decoration"></div>
+    <div class="snowflakes" id="snowflakes"></div>
+    <div class="bad-ui-banner">
+        <marquee behavior="scroll" direction="left" scrollamount="5">🎄 WELCOME TO THE WORST UX COMPETITION OF 2025! 🎅
+            Make Santa cringe! ❄️ Organized by Andrew Szigethy & Sidhartha Jangam 🎁</marquee>
+    </div>
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="logo" onclick="navigateTo('submit')">
+                <div class="logo-icon">🎄</div><span>ConnX Bad UI 2025</span>
+            </div>
+            <div class="nav-links"><button class="nav-link active" data-page="submit">📝 Submit</button><button
+                    class="nav-link" data-page="vote">🗳️ Vote</button><button class="nav-link" data-page="winners">🏆
+                    Winners</button></div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="page active" id="page-submit">
+            <div class="hero">
+                <div class="hero-badge">🎉 Holiday Competition 2025 - Where Good UX Goes to Die</div>
+                <h1>🎄 BAD UI CHALLENGE 🎄</h1>
+                <p>Create the most hilariously inconvenient "Rate Your Ride" widget! Make users question their life
+                    choices. The worse the experience, the better! 🤪</p>
+                <div class="organizer-info">🎅 <strong>Organized by:</strong> <span class="name">Andrew Szigethy</span>
+                    | 🧝 <strong>Platform by:</strong> <span class="name">Sidhartha Jangam</span></div>
+            </div>
+            <div class="card wonky" style="max-width: 800px; margin: 0 auto;">
+                <div class="card-header">
+                    <div class="card-icon submit">📤</div>
+                    <h2>Submit Your Terrible Creation</h2>
+                </div>
+                <div id="submission-limit-info" class="submission-counter">📊 You can submit up to 2 entries per email
+                </div>
+                <form id="submission-form">
+                    <div class="grid-2">
+                        <div class="form-group"><label>First Name * <span class="label-fun">(so we know who to blame
+                                    😏)</span></label><input type="text" id="firstName" required
+                                placeholder="Your first name"></div>
+                        <div class="form-group"><label>Last Name * <span class="label-fun">(for the hall of
+                                    shame)</span></label><input type="text" id="lastName" required
+                                placeholder="Your last name"></div>
+                    </div>
+                    <div class="form-group"><label>Email * <span class="label-fun">(we promise to only send 47
+                                confirmation emails)</span></label><input type="email" id="email" required
+                            placeholder="your.email@connxai.com" onblur="checkSubmissionCount()"></div>
+                    <div class="tabs"><button type="button" class="tab active" data-tab="url">🔗 GitHub
+                            URL</button><button type="button" class="tab" data-tab="code">💻 Paste Code</button></div>
+                    <div class="tab-content active" id="tab-url">
+                        <div class="form-group"><label>GitHub Pages URL</label><input type="url" id="websiteUrl"
+                                placeholder="https://yourusername.github.io/bad-ui/"><small>Host your widget on GitHub
+                                Pages</small></div>
+                    </div>
+                    <div class="tab-content" id="tab-code">
+                        <div class="form-group"><label>HTML/CSS/JS Code</label><textarea id="codeInput"
+                                placeholder="<!-- Your terrible code here -->"></textarea><small>Paste complete HTML
+                                with inline CSS/JS</small></div>
+                    </div>
+                    <div class="preview-container">
+                        <div class="preview-label">👁️ Live Preview (500×350px) - <em
+                                style="color: var(--accent-pink);">Witness the horror!</em></div>
+                        <div class="preview-frame-wrapper">
+                            <div class="preview-placeholder" id="preview-placeholder"><span>🖼️</span>Enter URL or paste
+                                code to preview</div><iframe class="preview-frame" id="preview-frame"
+                                style="display: none;"></iframe>
+                        </div>
+                    </div>
+                    <div class="funny-disclaimer"><strong>⚠️ DISCLAIMER:</strong> By submitting, you swear your UI is
+                        intentionally terrible. If accidentally user-friendly, you may face public appreciation (the
+                        horror! 😱).</div>
+                    <div class="fun-tip"><strong>💡 Pro Tips:</strong> Moving buttons, impossible CAPTCHAs, upside-down
+                        text, scales from -7 to purple, forms that submit on hover...</div>
+                    <div style="margin-top: 2rem; text-align: center;"><button type="submit" class="btn btn-primary"
+                            id="submit-btn">🚀 Unleash This Upon the World</button></div>
+                </form>
+            </div>
+        </div>
+        <div class="page" id="page-vote">
+            <div class="voting-header">
+                <h1 style="transform: rotate(1deg);">🗳️ VOTE FOR THE WORST!</h1>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Experience each terrible interface and
+                    vote! You can vote for multiple entries.</p>
+                <p style="color: var(--accent-pink); font-family: 'Comic Neue', cursive; font-size: 0.9rem;">⚠️ Warning:
+                    Exposure may cause frustration and laughter</p>
+                <div class="voter-input-container" style="margin-top: 1rem;">
+                    <div class="voter-info"><input type="text" id="voterName" placeholder="Your first name"><button
+                            class="btn btn-primary btn-sm" id="submitVotesBtn" disabled>Submit All Votes</button></div>
+                </div>
+            </div>
+            <div class="grid-3" id="entries-grid">
+                <div class="empty-state"><span>📭</span>
+                    <h3>No entries yet!</h3>
+                    <p>The bad UIs are coming...</p>
+                </div>
+            </div>
+        </div>
+        <div class="page" id="page-winners">
+            <div class="voting-header">
+                <h1 style="transform: rotate(-1deg);">🏆 THE HALL OF SHAME 🏆</h1>
+                <p style="color: var(--text-secondary);">Celebrating the most delightfully terrible UIs!</p>
+                <p style="color: var(--accent-yellow); font-size: 0.9rem; margin-top: 0.5rem;">👆 Click any winner to
+                    view their masterpiece</p>
+            </div>
+            <div class="winners-container" id="winners-container">
+                <div class="winners-pending">
+                    <div class="pending-icon">🎁</div>
+                    <h3 style="font-size: 2rem; margin-bottom: 1rem; font-family: 'Bangers', cursive;">WINNERS NOT
+                        ANNOUNCED YET!</h3>
+                    <p style="color: var(--text-secondary);">The suspense! Winners revealed at the Holiday Party! 😱</p>
+                </div>
+            </div>
+        </div>
+        <div class="page" id="page-admin">
+            <div id="admin-login-section" class="admin-login">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon admin">🔐</div>
+                        <h2>Secret Admin Portal</h2>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">You found it! 🕵️ Prove you're
+                        worthy...</p>
+                    <form id="admin-login-form">
+                        <div class="form-group"><label>Password <span class="label-fun">(hint: not
+                                    "password123")</span></label><input type="password" id="adminPassword" required
+                                placeholder="Enter the sacred password"></div><button type="submit"
+                            class="btn btn-primary" style="width: 100%;">🔓 Grant Me Power!</button>
+                    </form>
+                </div>
+            </div>
+            <div id="admin-panel-section" style="display: none;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h1 style="font-family: 'Bangers', cursive; font-size: 2.2rem; color: var(--accent-purple);">🎛️
+                        ADMIN CONTROL CENTER 🎛️</h1>
+                </div>
+                <div class="admin-tabs"><button class="admin-tab active" data-admin-tab="users">👥
+                        Submissions</button><button class="admin-tab" data-admin-tab="winners">🏆 Winners</button></div>
+                <div class="admin-content active" id="admin-users">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>📋 All Submissions</h2>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Entry</th>
+                                        <th>Votes</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table-body">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center;">Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-content" id="admin-winners" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>🎯 Select Winners</h2>
+                        </div>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;"><strong
+                                style="color: var(--accent-green);">1st-3rd:</strong> Auto by votes (can override) |
+                            <strong style="color: var(--accent-orange);">4th-5th:</strong> Another BAD UI / UX | <strong
+                                style="color: var(--accent-pink);">All 5 must be unique!</strong></p>
+                        <div id="winners-selection">
+                            <div class="winner-selection-row">
+                                <div class="rank-badge"
+                                    style="background: linear-gradient(135deg, #ffd700, #ffb800); color: #1a1a1a;">🥇
+                                </div><select id="winner1">
+                                    <option value="">Loading...</option>
+                                </select><span class="auto-badge" id="badge1">AUTO</span>
+                            </div>
+                            <div class="winner-selection-row">
+                                <div class="rank-badge"
+                                    style="background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: #1a1a1a;">🥈
+                                </div><select id="winner2">
+                                    <option value="">Loading...</option>
+                                </select><span class="auto-badge" id="badge2">AUTO</span>
+                            </div>
+                            <div class="winner-selection-row">
+                                <div class="rank-badge"
+                                    style="background: linear-gradient(135deg, #cd7f32, #b87333); color: white;">🥉
+                                </div><select id="winner3">
+                                    <option value="">Loading...</option>
+                                </select><span class="auto-badge" id="badge3">AUTO</span>
+                            </div>
+                            <div class="winner-selection-row">
+                                <div class="rank-badge"
+                                    style="background: linear-gradient(135deg, var(--accent-purple), #6b21a8); color: white;">
+                                    4th</div><select id="winner4">
+                                    <option value="">-- Leadership's Choice --</option>
+                                </select><span class="manual-badge">MANUAL</span>
+                            </div>
+                            <div class="winner-selection-row">
+                                <div class="rank-badge"
+                                    style="background: linear-gradient(135deg, var(--accent-blue), #0369a1); color: white;">
+                                    5th</div><select id="winner5">
+                                    <option value="">-- Leadership's Choice --</option>
+                                </select><span class="manual-badge">MANUAL</span>
+                            </div>
+                        </div>
+                        <div class="funny-disclaimer"><strong>📊 Vote Adjustment:</strong> On publish, votes auto-adjust
+                            so rankings make sense. It's not rigging, it's creative mathematics! 🧮✨</div>
+                        <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;"><button
+                                class="btn btn-success" id="publishWinnersBtn">📢 Publish Winners!</button><button
+                                class="btn btn-secondary" id="unpublishWinnersBtn">🙈 Hide</button><button
+                                class="btn btn-secondary" id="resetSelectionsBtn">🔄 Reset</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="preview-modal-overlay" id="preview-modal-overlay">
+        <div class="preview-modal">
+            <div class="preview-modal-header">
+                <h3 id="preview-modal-title">🎨 Viewing Entry</h3><button class="preview-modal-close"
+                    onclick="closePreviewModal()">×</button>
+            </div>
+            <div class="preview-modal-frame-wrapper"><iframe class="preview-modal-frame"
+                    id="preview-modal-frame"></iframe></div>
+            <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem;">Press ESC or
+                click outside to close</p>
+        </div>
+    </div>
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>✏️ Edit Submission</h2><button class="modal-close" onclick="closeEditModal()">×</button>
+            </div>
+            <form id="edit-form"><input type="hidden" id="edit-id">
+                <div class="form-group"><label>First Name</label><input type="text" id="edit-firstName" required></div>
+                <div class="form-group"><label>Last Name</label><input type="text" id="edit-lastName" required></div>
+                <div class="form-group"><label>Email</label><input type="email" id="edit-email" required></div>
+                <div class="form-group"><label>URL</label><input type="text" id="edit-url"></div>
+                <div class="form-group"><label>Votes <span class="label-fun">(yes, you can change this
+                            😈)</span></label><input type="number" id="edit-votes" min="0"></div>
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;"><button type="submit" class="btn btn-primary"
+                        style="flex: 1;">💾 Save</button><button type="button" class="btn btn-secondary"
+                        onclick="closeEditModal()">Cancel</button></div>
+            </form>
+        </div>
+    </div>
+    <div class="toast-container" id="toast-container"></div>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyDlR4QxTG6EGwkHXJgQE-_WS-33cs9ytZY", authDomain: "website-competition-fd59e.firebaseapp.com", projectId: "website-competition-fd59e", storageBucket: "website-competition-fd59e.firebasestorage.app", messagingSenderId: "558845407480", appId: "1:558845407480:web:cef69f716712998e524b0d" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const ADMIN_PASSWORD = "ConnX2025!";
+        let submissions = [], currentVotes = new Set(), isAdminLoggedIn = false, allUniqueUsers = [], autoSelections = { 1: null, 2: null, 3: null };
+
+        function checkAdminAccess() { if (new URLSearchParams(window.location.search).get('admin') === 'siddhu') navigateTo('admin'); }
+        function createSnowflakes() { const c = document.getElementById('snowflakes'), chars = ['❄', '❅', '❆', '🎄', '🎁', '⭐', '🎅']; for (let i = 0; i < 25; i++) { const s = document.createElement('div'); s.className = 'snowflake'; s.textContent = chars[Math.floor(Math.random() * chars.length)]; s.style.left = Math.random() * 100 + '%'; s.style.animationDuration = (Math.random() * 10 + 8) + 's'; s.style.animationDelay = Math.random() * 10 + 's'; s.style.fontSize = (Math.random() * 1 + 0.5) + 'rem'; s.style.opacity = Math.random() * 0.4 + 0.2; c.appendChild(s); } }
+        function navigateTo(page) { document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active')); const nl = document.querySelector(`.nav-link[data-page="${page}"]`); if (nl) nl.classList.add('active'); document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(`page-${page}`).classList.add('active'); if (page === 'vote') loadEntriesForVoting(); if (page === 'winners') loadWinners(); if (page === 'admin' && isAdminLoggedIn) loadAdminData(); }
+        document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', () => navigateTo(link.dataset.page)));
+        document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); tab.classList.add('active'); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active'); }));
+        document.querySelectorAll('.admin-tab').forEach(tab => tab.addEventListener('click', () => { document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active')); tab.classList.add('active'); document.querySelectorAll('.admin-content').forEach(c => c.style.display = 'none'); document.getElementById(`admin-${tab.dataset.adminTab}`).style.display = 'block'; if (tab.dataset.adminTab === 'winners') loadWinnersSelection(); }));
+
+        async function checkSubmissionCount() { const email = document.getElementById('email').value.trim().toLowerCase(); if (!email) return; try { const s = await db.collection('submissions').where('email', '==', email).get(); const c = s.docs.length, info = document.getElementById('submission-limit-info'); if (c >= 2) { info.textContent = '🚫 Maximum reached! You have 2 entries.'; info.className = 'submission-counter error'; } else if (c === 1) { info.textContent = '⚠️ You have 1 entry. Room for one more!'; info.className = 'submission-counter warning'; } else { info.textContent = '📊 You can submit up to 2 entries per email'; info.className = 'submission-counter'; } } catch (e) { console.error(e); } }
+
+        const websiteUrlInput = document.getElementById('websiteUrl'), codeInput = document.getElementById('codeInput'), previewFrame = document.getElementById('preview-frame'), previewPlaceholder = document.getElementById('preview-placeholder'); let previewDebounce;
+        websiteUrlInput.addEventListener('input', () => { clearTimeout(previewDebounce); previewDebounce = setTimeout(() => { const url = websiteUrlInput.value.trim(); if (url) { previewFrame.src = url; previewFrame.style.display = 'block'; previewPlaceholder.style.display = 'none'; } else { previewFrame.style.display = 'none'; previewPlaceholder.style.display = 'block'; } }, 500); });
+        codeInput.addEventListener('input', () => { clearTimeout(previewDebounce); previewDebounce = setTimeout(() => { const code = codeInput.value.trim(); if (code) { previewFrame.src = URL.createObjectURL(new Blob([code], { type: 'text/html' })); previewFrame.style.display = 'block'; previewPlaceholder.style.display = 'none'; } else { previewFrame.style.display = 'none'; previewPlaceholder.style.display = 'block'; } }, 500); });
+
+        document.getElementById('submission-form').addEventListener('submit', async (e) => { e.preventDefault(); const btn = document.getElementById('submit-btn'); btn.disabled = true; btn.innerHTML = '<div class="spinner"></div> Deploying...'; const firstName = document.getElementById('firstName').value.trim(), lastName = document.getElementById('lastName').value.trim(), email = document.getElementById('email').value.trim().toLowerCase(), websiteUrl = document.getElementById('websiteUrl').value.trim(), code = document.getElementById('codeInput').value.trim(); if (!websiteUrl && !code) { showToast('Provide URL or code!', 'error'); btn.disabled = false; btn.innerHTML = '🚀 Unleash This Upon the World'; return; } try { const ex = await db.collection('submissions').where('email', '==', email).get(); if (ex.docs.length >= 2) { showToast('Max 2 entries reached!', 'error'); btn.disabled = false; btn.innerHTML = '🚀 Unleash This Upon the World'; return; } await db.collection('submissions').add({ firstName, lastName, email, url: websiteUrl || null, code: code || null, type: websiteUrl ? 'url' : 'code', votes: 0, voters: [], createdAt: firebase.firestore.FieldValue.serverTimestamp() }); showToast('🎉 Your creation has been unleashed!', 'success'); document.getElementById('submission-form').reset(); previewFrame.style.display = 'none'; previewPlaceholder.style.display = 'block'; checkSubmissionCount(); } catch (err) { console.error(err); showToast('Submission failed!', 'error'); } btn.disabled = false; btn.innerHTML = '🚀 Unleash This Upon the World'; });
+
+        async function loadEntriesForVoting() { const grid = document.getElementById('entries-grid'); grid.innerHTML = '<div class="empty-state"><div class="spinner" style="width:40px;height:40px;margin:0 auto;"></div></div>'; try { const snap = await db.collection('submissions').orderBy('createdAt', 'desc').get(); submissions = snap.docs.map(d => ({ id: d.id, ...d.data() })); if (!submissions.length) { grid.innerHTML = '<div class="empty-state"><span>📭</span><h3>No entries yet!</h3></div>'; return; } grid.innerHTML = submissions.map((e, i) => `<div class="entry-card"><div class="entry-frame-wrapper"><iframe class="entry-frame" src="${e.type === 'url' ? e.url : 'about:blank'}" data-code="${e.type === 'code'}" data-index="${i}" sandbox="allow-scripts allow-same-origin"></iframe></div><div class="entry-actions"><button class="vote-btn" data-id="${e.id}" onclick="toggleVote('${e.id}')">❤️ Vote</button></div></div>`).join(''); submissions.forEach((e, i) => { if (e.type === 'code' && e.code) { const iframe = document.querySelector(`iframe[data-index="${i}"]`); if (iframe) iframe.src = URL.createObjectURL(new Blob([e.code], { type: 'text/html' })); } }); } catch (err) { console.error(err); grid.innerHTML = '<div class="empty-state"><span>💥</span><h3>Error loading</h3></div>'; } }
+
+        function toggleVote(id) { const name = document.getElementById('voterName').value.trim(); if (!name) { showToast('Enter your name first!', 'warning'); document.getElementById('voterName').focus(); return; } const btn = document.querySelector(`.vote-btn[data-id="${id}"]`); if (currentVotes.has(id)) { currentVotes.delete(id); btn.classList.remove('voted'); btn.innerHTML = '❤️ Vote'; } else { currentVotes.add(id); btn.classList.add('voted'); btn.innerHTML = '💖 Voted!'; } document.getElementById('submitVotesBtn').disabled = currentVotes.size === 0; }
+
+        document.getElementById('submitVotesBtn').addEventListener('click', async () => { const name = document.getElementById('voterName').value.trim(); if (!name || !currentVotes.size) return; const btn = document.getElementById('submitVotesBtn'); btn.disabled = true; btn.innerHTML = '<div class="spinner"></div>'; try { const batch = db.batch(); for (const id of currentVotes) { batch.update(db.collection('submissions').doc(id), { votes: firebase.firestore.FieldValue.increment(1), voters: firebase.firestore.FieldValue.arrayUnion(name) }); } await db.collection('voters').add({ name, votedFor: Array.from(currentVotes), votedAt: firebase.firestore.FieldValue.serverTimestamp() }); await batch.commit(); showToast(`Thanks ${name}! 🎉`, 'success'); currentVotes.clear(); document.querySelectorAll('.vote-btn').forEach(b => { b.classList.remove('voted'); b.innerHTML = '❤️ Vote'; }); document.getElementById('voterName').value = ''; btn.disabled = true; btn.innerHTML = 'Submit All Votes'; } catch (err) { console.error(err); showToast('Vote failed!', 'error'); btn.disabled = false; btn.innerHTML = 'Submit All Votes'; } });
+
+        document.getElementById('admin-login-form').addEventListener('submit', (e) => { e.preventDefault(); if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) { isAdminLoggedIn = true; document.getElementById('admin-login-section').style.display = 'none'; document.getElementById('admin-panel-section').style.display = 'block'; loadAdminData(); showToast('Welcome to the dark side! 🌟', 'success'); } else { showToast('Wrong password! 😏', 'error'); } });
+
+        async function loadAdminData() { const tbody = document.getElementById('users-table-body'); tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;"><div class="spinner" style="margin:0 auto;"></div></td></tr>'; try { const snap = await db.collection('submissions').orderBy('votes', 'desc').get(); submissions = snap.docs.map(d => ({ id: d.id, ...d.data() })); if (!submissions.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No submissions yet</td></tr>'; return; } tbody.innerHTML = submissions.map(e => `<tr><td><strong>${e.firstName} ${e.lastName}</strong></td><td style="font-size:0.85rem;">${e.email}</td><td>${e.type === 'url' ? `<a href="${e.url}" target="_blank" style="color:var(--accent-blue);">🔗 View</a>` : '📝 Code'} <button class="btn btn-sm" style="margin-left:0.3rem;padding:0.2rem 0.5rem;" onclick="openPreviewModal('${e.id}')">👁️</button></td><td><strong style="color:var(--accent-green);">${e.votes || 0}</strong></td><td class="actions-cell"><button class="btn btn-secondary btn-sm" onclick="openEditModal('${e.id}')">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteEntry('${e.id}')">🗑️</button></td></tr>`).join(''); } catch (err) { console.error(err); tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--error);">Error</td></tr>'; } }
+
+        function openPreviewModal(id) { const e = submissions.find(s => s.id === id); if (!e) return; const modal = document.getElementById('preview-modal-overlay'), frame = document.getElementById('preview-modal-frame'), title = document.getElementById('preview-modal-title'); title.textContent = `🎨 ${e.firstName} ${e.lastName}'s Creation`; if (e.type === 'url' && e.url) frame.src = e.url; else if (e.code) frame.src = URL.createObjectURL(new Blob([e.code], { type: 'text/html' })); modal.classList.add('active'); }
+        function closePreviewModal() { const modal = document.getElementById('preview-modal-overlay'), frame = document.getElementById('preview-modal-frame'); modal.classList.remove('active'); setTimeout(() => { frame.src = 'about:blank'; }, 300); }
+        document.getElementById('preview-modal-overlay').addEventListener('click', (e) => { if (e.target.id === 'preview-modal-overlay') closePreviewModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePreviewModal(); });
+
+        function openEditModal(id) { const e = submissions.find(s => s.id === id); if (!e) return; document.getElementById('edit-id').value = id; document.getElementById('edit-firstName').value = e.firstName; document.getElementById('edit-lastName').value = e.lastName; document.getElementById('edit-email').value = e.email; document.getElementById('edit-url').value = e.url || ''; document.getElementById('edit-votes').value = e.votes || 0; document.getElementById('edit-modal').classList.add('active'); }
+        function closeEditModal() { document.getElementById('edit-modal').classList.remove('active'); }
+        document.getElementById('edit-form').addEventListener('submit', async (e) => { e.preventDefault(); const id = document.getElementById('edit-id').value; const updates = { firstName: document.getElementById('edit-firstName').value.trim(), lastName: document.getElementById('edit-lastName').value.trim(), email: document.getElementById('edit-email').value.trim().toLowerCase(), url: document.getElementById('edit-url').value.trim() || null, votes: parseInt(document.getElementById('edit-votes').value) || 0 }; try { await db.collection('submissions').doc(id).update(updates); showToast('Updated! ✨', 'success'); closeEditModal(); loadAdminData(); } catch (err) { console.error(err); showToast('Update failed!', 'error'); } });
+
+        async function deleteEntry(id) { if (!confirm('Delete this entry forever?')) return; try { await db.collection('submissions').doc(id).delete(); showToast('Deleted! 💨', 'success'); loadAdminData(); } catch (err) { console.error(err); showToast('Delete failed!', 'error'); } }
+
+        async function loadWinnersSelection() { try { const snap = await db.collection('submissions').orderBy('votes', 'desc').get(); const all = snap.docs.map(d => ({ id: d.id, ...d.data() })); allUniqueUsers = []; const seen = new Set(); for (const e of all) { if (!seen.has(e.email)) { allUniqueUsers.push(e); seen.add(e.email); } } autoSelections = { 1: allUniqueUsers[0]?.id || null, 2: allUniqueUsers[1]?.id || null, 3: allUniqueUsers[2]?.id || null }; populateWinnerDropdowns(); } catch (err) { console.error(err); } }
+        function populateWinnerDropdowns() { const ids = ['winner1', 'winner2', 'winner3', 'winner4', 'winner5']; ids.forEach((did, i) => { const dd = document.getElementById(did), cv = dd.value; const sv = ids.filter(x => x !== did).map(x => document.getElementById(x).value).filter(v => v); let h = `<option value="">-- Position ${i + 1} --</option>`; allUniqueUsers.forEach(u => { const isSel = cv === u.id, isUsed = sv.includes(u.id); if (!isUsed || isSel) h += `<option value="${u.id}" ${isSel ? 'selected' : ''}>${u.firstName} ${u.lastName} (${u.votes} votes)</option>`; }); dd.innerHTML = h; if (i < 3 && !cv && autoSelections[i + 1]) dd.value = autoSelections[i + 1]; }); updateBadges(); }
+        function updateBadges() { for (let i = 1; i <= 3; i++) { const b = document.getElementById(`badge${i}`), d = document.getElementById(`winner${i}`); if (d.value === autoSelections[i]) { b.textContent = 'AUTO'; b.className = 'auto-badge'; } else { b.textContent = 'MANUAL'; b.className = 'manual-badge'; } } }
+        ['winner1', 'winner2', 'winner3', 'winner4', 'winner5'].forEach(id => document.getElementById(id).addEventListener('change', populateWinnerDropdowns));
+        document.getElementById('resetSelectionsBtn').addEventListener('click', () => { document.getElementById('winner1').value = autoSelections[1] || ''; document.getElementById('winner2').value = autoSelections[2] || ''; document.getElementById('winner3').value = autoSelections[3] || ''; document.getElementById('winner4').value = ''; document.getElementById('winner5').value = ''; populateWinnerDropdowns(); showToast('Reset! 🔄', 'success'); });
+
+        document.getElementById('publishWinnersBtn').addEventListener('click', async () => { const sids = [document.getElementById('winner1').value, document.getElementById('winner2').value, document.getElementById('winner3').value, document.getElementById('winner4').value, document.getElementById('winner5').value]; if (sids.some(x => !x)) { showToast('Select all 5!', 'warning'); return; } if (new Set(sids).size !== 5) { showToast('All 5 must be unique!', 'error'); return; } const winners = sids.map(id => allUniqueUsers.find(u => u.id === id)); let base = Math.max(...winners.map(w => w.votes), 50) + 15; const adj = winners.map((_, i) => base - (i * 4)); const data = { positions: winners.map((w, i) => ({ id: w.id, firstName: w.firstName, lastName: w.lastName, email: w.email, url: w.url, code: w.code, type: w.type, originalVotes: w.votes, displayVotes: adj[i], position: i + 1 })), published: true, publishedAt: firebase.firestore.FieldValue.serverTimestamp() }; try { const batch = db.batch(); winners.forEach((w, i) => batch.update(db.collection('submissions').doc(w.id), { votes: adj[i] })); const fifth = adj[4], allDocs = await db.collection('submissions').get(); allDocs.docs.forEach(doc => { if (!sids.includes(doc.id) && (doc.data().votes || 0) >= fifth) batch.update(doc.ref, { votes: fifth - 1 - Math.floor(Math.random() * 5) }); }); await batch.commit(); await db.collection('settings').doc('winners').set(data); showToast('🎉 Winners published!', 'success'); loadAdminData(); } catch (err) { console.error(err); showToast('Publish failed!', 'error'); } });
+
+        document.getElementById('unpublishWinnersBtn').addEventListener('click', async () => { if (!confirm('Hide winners?')) return; try { await db.collection('settings').doc('winners').delete(); showToast('Hidden! 🙈', 'success'); } catch (err) { console.error(err); showToast('Failed!', 'error'); } });
+
+        async function loadWinners() { const c = document.getElementById('winners-container'); c.innerHTML = '<div class="empty-state"><div class="spinner" style="width:40px;height:40px;margin:0 auto;"></div></div>'; try { const doc = await db.collection('settings').doc('winners').get(); if (!doc.exists || !doc.data().published) { c.innerHTML = `<div class="winners-pending"><div class="pending-icon">🎁</div><h3 style="font-size:2rem;margin-bottom:1rem;font-family:'Bangers',cursive;">WINNERS NOT ANNOUNCED YET!</h3><p style="color:var(--text-secondary);">Stay tuned for the Holiday Party reveal! 😱</p></div>`; return; } const winners = doc.data().positions; const labels = [{ l: '🥇 First Place - Ultimate Bad UI Champion!', c: 'first', i: '1st' }, { l: '🥈 Second Place - Almost the Worst!', c: 'second', i: '2nd' }, { l: '🥉 Third Place - Bronze Medal of Confusion', c: 'third', i: '3rd' }, { l: '⭐ Fourth Place - Leadership\'s Choice', c: 'fourth', i: '4th' }, { l: '⭐ Fifth Place - Leadership\'s Choice', c: 'fifth', i: '5th' }]; c.innerHTML = winners.map((w, i) => `<div class="winner-card ${labels[i].c}" onclick="openWinnerPreview('${w.id}')"><div class="winner-rank ${labels[i].c}">${labels[i].i}</div><div class="winner-info"><div class="winner-name">${w.firstName} ${w.lastName}</div><div class="winner-label">${labels[i].l}</div></div><div class="winner-votes">${w.displayVotes} votes</div></div>`).join(''); window.winnersData = winners; createConfetti(); } catch (err) { console.error(err); c.innerHTML = '<div class="empty-state"><span>💥</span><h3>Error</h3></div>'; } }
+        function openWinnerPreview(id) { const w = window.winnersData?.find(x => x.id === id); if (!w) return; const modal = document.getElementById('preview-modal-overlay'), frame = document.getElementById('preview-modal-frame'), title = document.getElementById('preview-modal-title'); title.textContent = `🏆 ${w.firstName} ${w.lastName}'s Entry`; if (w.type === 'url' && w.url) frame.src = w.url; else if (w.code) frame.src = URL.createObjectURL(new Blob([w.code], { type: 'text/html' })); modal.classList.add('active'); }
+
+        function createConfetti() { const cols = ['#ff4d6d', '#ff8c42', '#ffd166', '#06d6a0', '#118ab2', '#9d4edd', '#ffd700']; for (let i = 0; i < 50; i++) { setTimeout(() => { const c = document.createElement('div'); c.className = 'confetti'; c.style.left = Math.random() * 100 + 'vw'; c.style.backgroundColor = cols[Math.floor(Math.random() * cols.length)]; c.style.borderRadius = Math.random() > 0.5 ? '50%' : '0'; const s = Math.random() * 10 + 5; c.style.width = s + 'px'; c.style.height = s + 'px'; document.body.appendChild(c); setTimeout(() => c.remove(), 3000); }, i * 50); } }
+        function showToast(msg, type = 'success') { const c = document.getElementById('toast-container'), icons = { success: '✅', error: '❌', warning: '⚠️' }; const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<span style="font-size:1.2rem;">${icons[type]}</span><span>${msg}</span>`; c.appendChild(t); setTimeout(() => { t.style.animation = 'toastSlide 0.3s ease reverse'; setTimeout(() => t.remove(), 300); }, 4000); }
+
+        createSnowflakes(); checkAdminAccess();
+    </script>
+</body>
+
+</html>
