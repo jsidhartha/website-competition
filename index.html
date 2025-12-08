@@ -112,30 +112,88 @@
         .ghost-floating {
             width: 70px;
             height: 70px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M20,100 L20,40 Q20,10 50,10 Q80,10 80,40 L80,100 L70,90 L60,100 L50,90 L40,100 L30,90 L20,100' fill='white' opacity='0.8'/%3E%3Ccircle cx='35' cy='40' r='5' fill='black'/%3E%3Ccircle cx='65' cy='40' r='5' fill='black'/%3E%3Cellipse cx='50' cy='55' rx='5' ry='8' fill='black'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='70' r='25' fill='white' opacity='0.9'/%3E%3Ccircle cx='50' cy='45' r='18' fill='white' opacity='0.95'/%3E%3Ccircle cx='50' cy='25' r='12' fill='white' opacity='1'/%3E%3Ccircle cx='46' cy='22' r='2' fill='black'/%3E%3Ccircle cx='54' cy='22' r='2' fill='black'/%3E%3Cpolygon points='50,25 60,27 50,29' fill='%23ff7f00'/%3E%3Ccircle cx='50' cy='42' r='2' fill='black'/%3E%3Ccircle cx='50' cy='49' r='2' fill='black'/%3E%3Ccircle cx='50' cy='56' r='2' fill='black'/%3E%3C/svg%3E");
+            /* background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M20,100 L20,40 Q20,10 50,10 Q80,10 80,40 L80,100 L70,90 L60,100 L50,90 L40,100 L30,90 L20,100' fill='white' opacity='0.8'/%3E%3Ccircle cx='35' cy='40' r='5' fill='black'/%3E%3Ccircle cx='65' cy='40' r='5' fill='black'/%3E%3Cellipse cx='50' cy='55' rx='5' ry='8' fill='black'/%3E%3C/svg%3E"); */
             animation: floatPath3 20s linear infinite alternate;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
         }
 
         @keyframes floatPath1 {
-            0% { top: 110%; left: -10%; transform: rotate(0deg); }
-            25% { top: 60%; left: 30%; transform: rotate(10deg); }
-            50% { top: 10%; left: 80%; transform: rotate(-10deg); }
-            75% { top: 40%; left: 110%; transform: rotate(10deg); }
-            100% { top: 110%; left: -10%; transform: rotate(0deg); }
+            0% {
+                top: 110%;
+                left: -10%;
+                transform: rotate(0deg);
+            }
+
+            25% {
+                top: 60%;
+                left: 30%;
+                transform: rotate(10deg);
+            }
+
+            50% {
+                top: 10%;
+                left: 80%;
+                transform: rotate(-10deg);
+            }
+
+            75% {
+                top: 40%;
+                left: 110%;
+                transform: rotate(10deg);
+            }
+
+            100% {
+                top: 110%;
+                left: -10%;
+                transform: rotate(0deg);
+            }
         }
 
         @keyframes floatPath2 {
-            0% { top: -10%; left: 20%; transform: rotate(0deg); }
-            33% { top: 40%; left: 90%; transform: rotate(180deg); }
-            66% { top: 90%; left: 10%; transform: rotate(360deg); }
-            100% { top: -10%; left: 20%; transform: rotate(720deg); }
+            0% {
+                top: -10%;
+                left: 20%;
+                transform: rotate(0deg);
+            }
+
+            33% {
+                top: 40%;
+                left: 90%;
+                transform: rotate(180deg);
+            }
+
+            66% {
+                top: 90%;
+                left: 10%;
+                transform: rotate(360deg);
+            }
+
+            100% {
+                top: -10%;
+                left: 20%;
+                transform: rotate(720deg);
+            }
         }
 
         @keyframes floatPath3 {
-            0% { top: 80%; left: -10%; transform: scale(1); }
-            50% { top: 20%; left: 50%; transform: scale(1.2); }
-            100% { top: 80%; left: 110%; transform: scale(1); }
+            0% {
+                top: 80%;
+                left: -10%;
+                transform: scale(1);
+            }
+
+            50% {
+                top: 20%;
+                left: 50%;
+                transform: scale(1.2);
+            }
+
+            100% {
+                top: 80%;
+                left: 110%;
+                transform: scale(1);
+            }
         }
 
         .snowflakes {
@@ -857,10 +915,11 @@
             color: var(--text-secondary);
             text-transform: uppercase;
             font-size: 0.8rem;
-            cursor: pointer; /* Clickable */
+            cursor: pointer;
+            /* Clickable */
             user-select: none;
         }
-        
+
         th:hover {
             background: var(--bg-card);
             color: var(--accent-yellow);
@@ -1317,7 +1376,7 @@
             max-width: 800px;
             margin: 0 auto;
         }
-        
+
         .rule-card {
             background: var(--bg-card);
             border: 2px solid var(--border-color);
@@ -1436,12 +1495,15 @@
             .winner-selection-row {
                 flex-direction: column;
             }
+
             .voter-info {
                 flex-direction: column;
             }
+
             .voter-info input {
                 width: 100%;
             }
+
             .rule-card {
                 flex-direction: column;
                 text-align: center;
@@ -1453,7 +1515,7 @@
 
 <body>
     <div class="bg-decoration"></div>
-    
+
     <!-- FLOATING CHARACTERS -->
     <div class="floater grinch-floating"></div>
     <div class="floater confused-floating">🥴</div>
@@ -1471,8 +1533,8 @@
             </div>
             <div class="nav-links">
                 <button class="nav-link active" data-page="submit">📝 Submit</button>
-                <button class="nav-link" data-page="vote">🗳️ Vote</button>
-                <!-- <button class="nav-link" data-page="winners">🏆 Winners</button> -->
+                <!-- <button class="nav-link" data-page="vote">🗳️ Vote</button>
+                <button class="nav-link" data-page="winners">🏆 Winners</button> -->
                 <button class="nav-link" data-page="guidelines">📜 Guidelines</button>
             </div>
         </div>
@@ -1545,7 +1607,7 @@
                 <p style="color: var(--accent-pink); font-family: 'Comic Neue', cursive; font-size: 0.9rem;">⚠️ Warning:
                     Exposure may cause frustration and laughter</p>
                 <div class="voter-input-container" style="margin-top: 2rem;">
-                    
+
                     <div class="voter-info">
                         <input type="text" id="voterName" placeholder="Your first name (required to vote)">
                         <button class="btn btn-primary" id="submitVotesBtn" disabled>Submit All Votes</button>
@@ -1575,51 +1637,63 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- NEW GUIDELINES PAGE -->
         <div class="page" id="page-guidelines">
             <div class="voting-header">
                 <h1 style="color: var(--accent-yellow);">📜 The Constitution of Chaos</h1>
-                <p style="color: var(--text-secondary);">Welcome to the rulebook. Read it, or don't. We can't stop you.</p>
+                <p style="color: var(--text-secondary);">Welcome to the rulebook. Read it, or don't. We can't stop you.
+                </p>
             </div>
             <div class="guidelines-content">
                 <div class="rule-card">
                     <div class="rule-icon">🛡️</div>
                     <div>
-                        <h3 style="color: var(--accent-green); margin-bottom: 0.5rem;">Rule #1: The "No Harm" Principle</h3>
+                        <h3 style="color: var(--accent-green); margin-bottom: 0.5rem;">Rule #1: The "No Harm" Principle
+                        </h3>
                         <p style="color: var(--text-secondary); line-height: 1.6;">
-                            We want eyes to bleed metaphorically, not literally. <strong>No malware, no stealing data, and no crashing browsers.</strong> 
+                            We want eyes to bleed metaphorically, not literally. <strong>No malware, no stealing data,
+                                and no crashing browsers.</strong>
                             If your UI summons a demon or mines crypto, you're disqualified.
                         </p>
                     </div>
                 </div>
+
+
                 <div class="rule-card">
                     <div class="rule-icon">🤡</div>
                     <div>
-                        <h3 style="color: var(--accent-pink); margin-bottom: 0.5rem;">Rule #2: The "User Last" Philosophy</h3>
+                        <h3 style="color: var(--accent-pink); margin-bottom: 0.5rem;">Rule #2: The "User Last"
+                            Philosophy</h3>
                         <p style="color: var(--text-secondary); line-height: 1.6;">
-                            If the user knows what to do immediately, you have failed. Add a spinner. 
-                            Move the button. Use Comic Sans. <strong>Confusion is the goal.</strong>
+                            If the user has a convenient experience, you could have done better. Add a spinner.
+                            Move the button. Use Comic Sans. <strong>Confusion and inconvenience is the goal.</strong>
                         </p>
                     </div>
                 </div>
+
                 <div class="rule-card">
                     <div class="rule-icon">🎩</div>
                     <div>
-                        <h3 style="color: var(--accent-purple); margin-bottom: 0.5rem;">Rule #3: Stay Classy (Kinda)</h3>
+                        <h3 style="color: var(--accent-purple); margin-bottom: 0.5rem;">Rule #3: Stay Classy (Kinda)
+                        </h3>
                         <p style="color: var(--text-secondary); line-height: 1.6;">
-                            Keep it Safe For Work (SFW). We are mocking bad design, not people. 
+                            Keep it Safe For Work (SFW). We are mocking bad design, not people.
                             Respect your fellow competitors, even if their color palettes are offensive.
                         </p>
                     </div>
                 </div>
+
+
                 <div class="rule-card">
                     <div class="rule-icon">🗳️</div>
                     <div>
                         <h3 style="color: var(--accent-orange); margin-bottom: 0.5rem;">Rule #4: Vote Responsibly</h3>
                         <p style="color: var(--text-secondary); line-height: 1.6;">
-                            Vote for the entry that made you the most angry. If you vote for your friend just because they are your friend,
-                            Santa puts you on the naughty list.
+                            Vote for the entries that made you the most angry or made you work the hardest to submit
+                            your feedback.
+                            If you vote for your friend just because they are your friend, Santa puts you on the naughty
+                            list.
                         </p>
                     </div>
                 </div>
@@ -1653,14 +1727,15 @@
                     <button class="admin-tab" data-admin-tab="votes">🗳️ Manage Votes</button>
                     <button class="admin-tab" data-admin-tab="winners">🏆 Winners</button>
                 </div>
-                
+
                 <div class="admin-content active" id="admin-users">
                     <div class="card">
                         <div class="card-header">
                             <h2>📋 All Submissions</h2>
                         </div>
                         <div class="form-group">
-                            <input type="text" id="search-submissions" placeholder="🔎 Search submissions..." onkeyup="filterTable('users-table-body', this.value)">
+                            <input type="text" id="search-submissions" placeholder="🔎 Search submissions..."
+                                onkeyup="filterTable('users-table-body', this.value)">
                         </div>
                         <div class="table-container">
                             <table id="submissions-table">
@@ -1689,9 +1764,11 @@
                         <div class="card-header">
                             <h2>🗳️ Individual Vote Records</h2>
                         </div>
-                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">See who voted for whom and delete invalid votes.</p>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">See who voted for whom and delete
+                            invalid votes.</p>
                         <div class="form-group">
-                            <input type="text" id="search-votes" placeholder="🔎 Search votes..." onkeyup="filterTable('votes-table-body', this.value)">
+                            <input type="text" id="search-votes" placeholder="🔎 Search votes..."
+                                onkeyup="filterTable('votes-table-body', this.value)">
                         </div>
                         <div class="table-container">
                             <table id="votes-table">
@@ -1722,7 +1799,8 @@
                         <p style="color: var(--text-secondary); margin-bottom: 1.5rem;"><strong
                                 style="color: var(--accent-green);">1st-3rd:</strong> Auto by votes (can override) |
                             <strong style="color: var(--accent-orange);">4th-5th:</strong> Another BAD UI / UX | <strong
-                                style="color: var(--accent-pink);">All 5 must be unique!</strong></p>
+                                style="color: var(--accent-pink);">All 5 must be unique!</strong>
+                        </p>
                         <div id="winners-selection">
                             <div class="winner-selection-row">
                                 <div class="rank-badge"
@@ -1760,7 +1838,9 @@
                                 </select><span class="manual-badge">MANUAL</span>
                             </div>
                         </div>
-                        <div class="funny-disclaimer"><strong>📊 Vote Count:</strong> Publishing now shows the <strong>exact real vote counts</strong> (no more creative math).</div>
+                        <div class="funny-disclaimer"><strong>📊 Vote Count:</strong> Publishing now shows the
+                            <strong>exact real vote counts</strong> (no more creative math).
+                        </div>
                         <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;"><button
                                 class="btn btn-success" id="publishWinnersBtn">📢 Publish Winners!</button><button
                                 class="btn btn-secondary" id="unpublishWinnersBtn">🙈 Hide</button><button
@@ -1815,14 +1895,14 @@
         function navigateTo(page) { document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active')); const nl = document.querySelector(`.nav-link[data-page="${page}"]`); if (nl) nl.classList.add('active'); document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(`page-${page}`).classList.add('active'); if (page === 'vote') loadEntriesForVoting(); if (page === 'winners') loadWinners(); if (page === 'admin' && isAdminLoggedIn) loadAdminData(); }
         document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', () => navigateTo(link.dataset.page)));
         document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); tab.classList.add('active'); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active'); }));
-        
-        document.querySelectorAll('.admin-tab').forEach(tab => tab.addEventListener('click', () => { 
-            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active')); 
-            tab.classList.add('active'); 
-            document.querySelectorAll('.admin-content').forEach(c => c.style.display = 'none'); 
-            document.getElementById(`admin-${tab.dataset.adminTab}`).style.display = 'block'; 
-            if (tab.dataset.adminTab === 'winners') loadWinnersSelection(); 
-            if (tab.dataset.adminTab === 'votes') loadAdminVotes(); 
+
+        document.querySelectorAll('.admin-tab').forEach(tab => tab.addEventListener('click', () => {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.admin-content').forEach(c => c.style.display = 'none');
+            document.getElementById(`admin-${tab.dataset.adminTab}`).style.display = 'block';
+            if (tab.dataset.adminTab === 'winners') loadWinnersSelection();
+            if (tab.dataset.adminTab === 'votes') loadAdminVotes();
         }));
 
         async function checkSubmissionCount() { const email = document.getElementById('email').value.trim().toLowerCase(); if (!email) return; try { const s = await db.collection('submissions').where('email', '==', email).get(); const c = s.docs.length, info = document.getElementById('submission-limit-info'); if (c >= 2) { info.textContent = '🚫 Maximum reached! You have 2 entries.'; info.className = 'submission-counter error'; } else if (c === 1) { info.textContent = '⚠️ You have 1 entry. Room for one more!'; info.className = 'submission-counter warning'; } else { info.textContent = '📊 You can submit up to 2 entries per email'; info.className = 'submission-counter'; } } catch (e) { console.error(e); } }
@@ -1833,20 +1913,20 @@
 
         document.getElementById('submission-form').addEventListener('submit', async (e) => { e.preventDefault(); const btn = document.getElementById('submit-btn'); btn.disabled = true; btn.innerHTML = '<div class="spinner"></div> Deploying...'; const firstName = document.getElementById('firstName').value.trim(), lastName = document.getElementById('lastName').value.trim(), email = document.getElementById('email').value.trim().toLowerCase(), websiteUrl = document.getElementById('websiteUrl').value.trim(), code = document.getElementById('codeInput').value.trim(); if (!websiteUrl && !code) { showToast('Provide URL or code!', 'error'); btn.disabled = false; btn.innerHTML = '🚀 Unleash This Upon the World'; return; } try { const ex = await db.collection('submissions').where('email', '==', email).get(); if (ex.docs.length >= 2) { showToast('Max 2 entries reached!', 'error'); btn.disabled = false; btn.innerHTML = '🚀 Unleash This Upon the World'; return; } await db.collection('submissions').add({ firstName, lastName, email, url: websiteUrl || null, code: code || null, type: websiteUrl ? 'url' : 'code', votes: 0, voters: [], createdAt: firebase.firestore.FieldValue.serverTimestamp() }); showToast('🎉 Your creation has been unleashed!', 'success'); document.getElementById('submission-form').reset(); previewFrame.style.display = 'none'; previewPlaceholder.style.display = 'block'; checkSubmissionCount(); } catch (err) { console.error(err); showToast('Submission failed!', 'error'); } btn.disabled = false; btn.innerHTML = '🚀 Unleash This Upon the World'; });
 
-        async function loadEntriesForVoting() { 
-            const grid = document.getElementById('entries-grid'); 
-            grid.innerHTML = '<div class="empty-state"><div class="spinner" style="width:40px;height:40px;margin:0 auto;"></div></div>'; 
-            
-            try { 
-                if(submissions.length === 0) {
-                    const snap = await db.collection('submissions').orderBy('createdAt', 'desc').get(); 
-                    submissions = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+        async function loadEntriesForVoting() {
+            const grid = document.getElementById('entries-grid');
+            grid.innerHTML = '<div class="empty-state"><div class="spinner" style="width:40px;height:40px;margin:0 auto;"></div></div>';
+
+            try {
+                if (submissions.length === 0) {
+                    const snap = await db.collection('submissions').orderBy('createdAt', 'desc').get();
+                    submissions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 }
 
-                if (!submissions.length) { 
-                    grid.innerHTML = '<div class="empty-state"><span>📭</span><h3>No entries found!</h3></div>'; 
-                    return; 
-                } 
+                if (!submissions.length) {
+                    grid.innerHTML = '<div class="empty-state"><span>📭</span><h3>No entries found!</h3></div>';
+                    return;
+                }
 
                 grid.innerHTML = submissions.map((e, i) => `
                 <div class="entry-card">
@@ -1857,62 +1937,62 @@
                     <div class="entry-actions">
                         <button class="vote-btn" data-id="${e.id}" onclick="toggleVote('${e.id}')">❤️ Vote</button>
                     </div>
-                </div>`).join(''); 
-                
-                submissions.forEach((e) => { 
-                    if (e.type === 'code' && e.code) { 
-                        const iframe = document.querySelector(`iframe[data-id="${e.id}"]`); 
-                        if (iframe) iframe.src = URL.createObjectURL(new Blob([e.code], { type: 'text/html' })); 
-                    } 
-                }); 
-            } catch (err) { 
-                console.error(err); 
-                grid.innerHTML = '<div class="empty-state"><span>💥</span><h3>Error loading</h3></div>'; 
-            } 
+                </div>`).join('');
+
+                submissions.forEach((e) => {
+                    if (e.type === 'code' && e.code) {
+                        const iframe = document.querySelector(`iframe[data-id="${e.id}"]`);
+                        if (iframe) iframe.src = URL.createObjectURL(new Blob([e.code], { type: 'text/html' }));
+                    }
+                });
+            } catch (err) {
+                console.error(err);
+                grid.innerHTML = '<div class="empty-state"><span>💥</span><h3>Error loading</h3></div>';
+            }
         }
 
         function toggleVote(id) { const name = document.getElementById('voterName').value.trim(); if (!name) { showToast('Enter your name first!', 'warning'); document.getElementById('voterName').focus(); return; } const btn = document.querySelector(`.vote-btn[data-id="${id}"]`); if (currentVotes.has(id)) { currentVotes.delete(id); btn.classList.remove('voted'); btn.innerHTML = '❤️ Vote'; } else { currentVotes.add(id); btn.classList.add('voted'); btn.innerHTML = '💖 Voted!'; } document.getElementById('submitVotesBtn').disabled = currentVotes.size === 0; }
 
-        document.getElementById('submitVotesBtn').addEventListener('click', async () => { 
-            const name = document.getElementById('voterName').value.trim(); 
-            if (!name || !currentVotes.size) return; 
-            const btn = document.getElementById('submitVotesBtn'); 
-            btn.disabled = true; 
-            btn.innerHTML = '<div class="spinner"></div>'; 
-            
-            try { 
-                const batch = db.batch(); 
-                
-                for (const id of currentVotes) { 
+        document.getElementById('submitVotesBtn').addEventListener('click', async () => {
+            const name = document.getElementById('voterName').value.trim();
+            if (!name || !currentVotes.size) return;
+            const btn = document.getElementById('submitVotesBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner"></div>';
+
+            try {
+                const batch = db.batch();
+
+                for (const id of currentVotes) {
                     const subRef = db.collection('submissions').doc(id);
-                    batch.update(subRef, { 
-                        votes: firebase.firestore.FieldValue.increment(1), 
-                        voters: firebase.firestore.FieldValue.arrayUnion(name) 
-                    }); 
+                    batch.update(subRef, {
+                        votes: firebase.firestore.FieldValue.increment(1),
+                        voters: firebase.firestore.FieldValue.arrayUnion(name)
+                    });
 
                     const submission = submissions.find(s => s.id === id);
-                    const voteRef = db.collection('votes').doc(); 
+                    const voteRef = db.collection('votes').doc();
                     batch.set(voteRef, {
                         voterName: name,
                         submissionId: id,
                         submissionCreator: submission ? `${submission.firstName} ${submission.lastName}` : 'Unknown',
                         votedAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                } 
-                
-                await batch.commit(); 
-                showToast(`Thanks ${name}! 🎉`, 'success'); 
-                currentVotes.clear(); 
-                document.querySelectorAll('.vote-btn').forEach(b => { b.classList.remove('voted'); b.innerHTML = '❤️ Vote'; }); 
-                document.getElementById('voterName').value = ''; 
-                btn.disabled = true; 
-                btn.innerHTML = 'Submit All Votes'; 
-            } catch (err) { 
-                console.error(err); 
-                showToast('Vote failed!', 'error'); 
-                btn.disabled = false; 
-                btn.innerHTML = 'Submit All Votes'; 
-            } 
+                }
+
+                await batch.commit();
+                showToast(`Thanks ${name}! 🎉`, 'success');
+                currentVotes.clear();
+                document.querySelectorAll('.vote-btn').forEach(b => { b.classList.remove('voted'); b.innerHTML = '❤️ Vote'; });
+                document.getElementById('voterName').value = '';
+                btn.disabled = true;
+                btn.innerHTML = 'Submit All Votes';
+            } catch (err) {
+                console.error(err);
+                showToast('Vote failed!', 'error');
+                btn.disabled = false;
+                btn.innerHTML = 'Submit All Votes';
+            }
         });
 
         document.getElementById('admin-login-form').addEventListener('submit', (e) => { e.preventDefault(); if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) { isAdminLoggedIn = true; document.getElementById('admin-login-section').style.display = 'none'; document.getElementById('admin-panel-section').style.display = 'block'; loadAdminData(); showToast('Welcome to the dark side! 🌟', 'success'); } else { showToast('Wrong password! 😏', 'error'); } });
@@ -1925,8 +2005,8 @@
             try {
                 // Ensure we have submissions loaded to lookup URLs
                 if (!submissions.length) {
-                     const subSnap = await db.collection('submissions').get();
-                     submissions = subSnap.docs.map(d => ({id: d.id, ...d.data()}));
+                    const subSnap = await db.collection('submissions').get();
+                    submissions = subSnap.docs.map(d => ({ id: d.id, ...d.data() }));
                 }
 
                 const snap = await db.collection('votes').orderBy('votedAt', 'desc').get();
@@ -1934,9 +2014,9 @@
                     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No votes recorded yet.</td></tr>';
                     return;
                 }
-                
+
                 const votes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                
+
                 tbody.innerHTML = votes.map(v => {
                     const sub = submissions.find(s => s.id === v.submissionId);
                     let urlDisplay = '<span style="color:var(--text-muted)">Deleted/Unknown</span>';
@@ -1980,8 +2060,8 @@
 
                 await batch.commit();
                 showToast('Vote removed successfully', 'success');
-                loadAdminVotes(); 
-                loadAdminData(); 
+                loadAdminVotes();
+                loadAdminData();
             } catch (err) {
                 console.error(err);
                 showToast('Failed to delete vote', 'error');
@@ -2012,7 +2092,7 @@
             const tbody = document.getElementById(tbodyId);
             let rows = Array.from(tbody.rows);
             // Ignore loading row
-            if(rows.length === 1 && rows[0].cells.length > 1) return;
+            if (rows.length === 1 && rows[0].cells.length > 1) return;
 
             // Toggle direction
             const key = tbodyId + n;
@@ -2022,7 +2102,7 @@
             rows.sort((a, b) => {
                 let x = a.getElementsByTagName("td")[n].textContent.trim();
                 let y = b.getElementsByTagName("td")[n].textContent.trim();
-                
+
                 if (isNumeric) {
                     return dir * (parseInt(x) - parseInt(y));
                 }
@@ -2049,63 +2129,63 @@
         ['winner1', 'winner2', 'winner3', 'winner4', 'winner5'].forEach(id => document.getElementById(id).addEventListener('change', populateWinnerDropdowns));
         document.getElementById('resetSelectionsBtn').addEventListener('click', () => { document.getElementById('winner1').value = autoSelections[1] || ''; document.getElementById('winner2').value = autoSelections[2] || ''; document.getElementById('winner3').value = autoSelections[3] || ''; document.getElementById('winner4').value = ''; document.getElementById('winner5').value = ''; populateWinnerDropdowns(); showToast('Reset! 🔄', 'success'); });
 
-        document.getElementById('publishWinnersBtn').addEventListener('click', async () => { 
-            const sids = [document.getElementById('winner1').value, document.getElementById('winner2').value, document.getElementById('winner3').value, document.getElementById('winner4').value, document.getElementById('winner5').value]; 
-            if (sids.some(x => !x)) { showToast('Select all 5!', 'warning'); return; } 
-            if (new Set(sids).size !== 5) { showToast('All 5 must be unique!', 'error'); return; } 
-            const winners = sids.map(id => allUniqueUsers.find(u => u.id === id)); 
-            
+        document.getElementById('publishWinnersBtn').addEventListener('click', async () => {
+            const sids = [document.getElementById('winner1').value, document.getElementById('winner2').value, document.getElementById('winner3').value, document.getElementById('winner4').value, document.getElementById('winner5').value];
+            if (sids.some(x => !x)) { showToast('Select all 5!', 'warning'); return; }
+            if (new Set(sids).size !== 5) { showToast('All 5 must be unique!', 'error'); return; }
+            const winners = sids.map(id => allUniqueUsers.find(u => u.id === id));
+
             // REMOVED CREATIVE MATH LOGIC - NOW USING REAL VOTES
-            const data = { 
-                positions: winners.map((w, i) => ({ 
-                    id: w.id, 
-                    firstName: w.firstName, 
-                    lastName: w.lastName, 
-                    email: w.email, 
-                    url: w.url, 
-                    code: w.code, 
-                    type: w.type, 
+            const data = {
+                positions: winners.map((w, i) => ({
+                    id: w.id,
+                    firstName: w.firstName,
+                    lastName: w.lastName,
+                    email: w.email,
+                    url: w.url,
+                    code: w.code,
+                    type: w.type,
                     displayVotes: w.votes, // Real votes
-                    position: i + 1 
-                })), 
-                published: true, 
-                publishedAt: firebase.firestore.FieldValue.serverTimestamp() 
-            }; 
-            
-            try { 
-                await db.collection('settings').doc('winners').set(data); 
-                showToast('🎉 Winners published with REAL counts!', 'success'); 
-                loadAdminData(); 
-            } catch (err) { 
-                console.error(err); 
-                showToast('Publish failed!', 'error'); 
-            } 
+                    position: i + 1
+                })),
+                published: true,
+                publishedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            try {
+                await db.collection('settings').doc('winners').set(data);
+                showToast('🎉 Winners published with REAL counts!', 'success');
+                loadAdminData();
+            } catch (err) {
+                console.error(err);
+                showToast('Publish failed!', 'error');
+            }
         });
 
         document.getElementById('unpublishWinnersBtn').addEventListener('click', async () => { if (!confirm('Hide winners?')) return; try { await db.collection('settings').doc('winners').delete(); showToast('Hidden! 🙈', 'success'); } catch (err) { console.error(err); showToast('Failed!', 'error'); } });
 
-        async function loadWinners() { 
-            const c = document.getElementById('winners-container'); 
-            c.innerHTML = '<div class="empty-state"><div class="spinner" style="width:40px;height:40px;margin:0 auto;"></div></div>'; 
-            try { 
-                const doc = await db.collection('settings').doc('winners').get(); 
-                if (!doc.exists || !doc.data().published) { 
-                    c.innerHTML = `<div class="winners-pending"><div class="pending-icon">🎁</div><h3 style="font-size:2rem;margin-bottom:1rem;font-family:'Bangers',cursive;">WINNERS NOT ANNOUNCED YET!</h3><p style="color:var(--text-secondary);">Stay tuned for the Holiday Party reveal! 😱</p></div>`; 
-                    return; 
-                } 
-                
+        async function loadWinners() {
+            const c = document.getElementById('winners-container');
+            c.innerHTML = '<div class="empty-state"><div class="spinner" style="width:40px;height:40px;margin:0 auto;"></div></div>';
+            try {
+                const doc = await db.collection('settings').doc('winners').get();
+                if (!doc.exists || !doc.data().published) {
+                    c.innerHTML = `<div class="winners-pending"><div class="pending-icon">🎁</div><h3 style="font-size:2rem;margin-bottom:1rem;font-family:'Bangers',cursive;">WINNERS NOT ANNOUNCED YET!</h3><p style="color:var(--text-secondary);">Stay tuned for the Holiday Party reveal! 😱</p></div>`;
+                    return;
+                }
+
                 let winners = doc.data().positions;
-                
+
                 // --- LIVE VOTE FETCHING LOGIC ---
                 // We fetch the current state of these specific submissions to ensure vote count is 100% accurate
                 try {
                     const winnerIds = winners.map(w => w.id);
                     // Firestore 'in' query works for up to 10 items (we have 5)
                     const liveSnaps = await db.collection('submissions').where(firebase.firestore.FieldPath.documentId(), 'in', winnerIds).get();
-                    
+
                     const liveVoteMap = new Map();
                     liveSnaps.docs.forEach(d => liveVoteMap.set(d.id, d.data().votes || 0));
-                    
+
                     // Update the winners array with the live vote count
                     winners = winners.map(w => ({
                         ...w,
@@ -2116,14 +2196,14 @@
                 }
                 // --------------------------------
 
-                const labels = [{ l: '🥇 First Place - Ultimate Bad UI Champion!', c: 'first', i: '1st' }, { l: '🥈 Second Place - Almost the Worst!', c: 'second', i: '2nd' }, { l: '🥉 Third Place - Bronze Medal of Confusion', c: 'third', i: '3rd' }, { l: '⭐ Fourth Place - Leadership\'s Choice', c: 'fourth', i: '4th' }, { l: '⭐ Fifth Place - Leadership\'s Choice', c: 'fifth', i: '5th' }]; 
-                c.innerHTML = winners.map((w, i) => `<div class="winner-card ${labels[i].c}" onclick="openWinnerPreview('${w.id}')"><div class="winner-rank ${labels[i].c}">${labels[i].i}</div><div class="winner-info"><div class="winner-name">${w.firstName} ${w.lastName}</div><div class="winner-label">${labels[i].l}</div></div><div class="winner-votes">${w.displayVotes} votes</div></div>`).join(''); 
-                window.winnersData = winners; 
-                createConfetti(); 
-            } catch (err) { 
-                console.error(err); 
-                c.innerHTML = '<div class="empty-state"><span>💥</span><h3>Error</h3></div>'; 
-            } 
+                const labels = [{ l: '🥇 First Place - Ultimate Bad UI Champion!', c: 'first', i: '1st' }, { l: '🥈 Second Place - Almost the Worst!', c: 'second', i: '2nd' }, { l: '🥉 Third Place - Bronze Medal of Confusion', c: 'third', i: '3rd' }, { l: '⭐ Fourth Place - Leadership\'s Choice', c: 'fourth', i: '4th' }, { l: '⭐ Fifth Place - Leadership\'s Choice', c: 'fifth', i: '5th' }];
+                c.innerHTML = winners.map((w, i) => `<div class="winner-card ${labels[i].c}" onclick="openWinnerPreview('${w.id}')"><div class="winner-rank ${labels[i].c}">${labels[i].i}</div><div class="winner-info"><div class="winner-name">${w.firstName} ${w.lastName}</div><div class="winner-label">${labels[i].l}</div></div><div class="winner-votes">${w.displayVotes} votes</div></div>`).join('');
+                window.winnersData = winners;
+                createConfetti();
+            } catch (err) {
+                console.error(err);
+                c.innerHTML = '<div class="empty-state"><span>💥</span><h3>Error</h3></div>';
+            }
         }
         function openWinnerPreview(id) { const w = window.winnersData?.find(x => x.id === id); if (!w) return; const modal = document.getElementById('preview-modal-overlay'), frame = document.getElementById('preview-modal-frame'), title = document.getElementById('preview-modal-title'); title.textContent = `🏆 ${w.firstName} ${w.lastName}'s Entry`; if (w.type === 'url' && w.url) frame.src = w.url; else if (w.code) frame.src = URL.createObjectURL(new Blob([w.code], { type: 'text/html' })); modal.classList.add('active'); }
 
