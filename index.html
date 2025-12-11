@@ -1510,6 +1510,50 @@
                 align-items: center;
             }
         }
+
+        
+        /* Responsive grid that fills the width with as many cards as will fit */
+#entries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+}
+
+
+/* Entry card must stretch to grid width */
+.entry-card {
+    width: 100%;
+    max-width: 700px;
+    border-radius: 16px;
+}
+
+
+/* Preview wrapper fills card width & keeps 520×380 aspect ratio */
+.entry-frame-wrapper {
+    width: 100%;
+    aspect-ratio: 500 / 350;
+    height: auto;
+    background: white;
+    overflow: hidden;
+}
+
+
+/* Iframe fills the preview completely */
+.entry-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+
+/* Center vote button, keep it consistent */
+.entry-actions {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
     </style>
 </head>
 
@@ -1585,7 +1629,7 @@
                                 style="color: var(--accent-pink);">Witness the horror!</em></div>
                         <div class="preview-frame-wrapper">
                             <div class="preview-placeholder" id="preview-placeholder"><span>🖼️</span>Enter URL or paste
-                                code to preview</div><iframe class="preview-frame" id="preview-frame"
+                                code to preview</div><iframe allow="microphone" class="preview-frame" id="preview-frame"
                                 style="display: none;"></iframe>
                         </div>
                     </div>
@@ -1856,7 +1900,7 @@
                 <h3 id="preview-modal-title">🎨 Viewing Entry</h3><button class="preview-modal-close"
                     onclick="closePreviewModal()">×</button>
             </div>
-            <div class="preview-modal-frame-wrapper"><iframe class="preview-modal-frame"
+            <div class="preview-modal-frame-wrapper"><iframe allow="microphone" class="preview-modal-frame"
                     id="preview-modal-frame"></iframe></div>
             <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem;">Press ESC or
                 click outside to close</p>
@@ -1932,7 +1976,7 @@
                 <div class="entry-card">
                     <div class="entry-frame-wrapper">
                         <!-- CREATOR BADGE REMOVED -->
-                        <iframe class="entry-frame" src="${e.type === 'url' ? e.url : 'about:blank'}" data-code="${e.type === 'code'}" data-id="${e.id}" sandbox="allow-scripts allow-same-origin"></iframe>
+                        <iframe allow="microphone" class="entry-frame" src="${e.type === 'url' ? e.url : 'about:blank'}" data-code="${e.type === 'code'}" data-id="${e.id}" sandbox="allow-scripts allow-same-origin"></iframe>
                     </div>
                     <div class="entry-actions">
                         <button class="vote-btn" data-id="${e.id}" onclick="toggleVote('${e.id}')">❤️ Vote</button>
